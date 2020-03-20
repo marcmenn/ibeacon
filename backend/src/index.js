@@ -22,4 +22,4 @@ app.post('/device', jsononly, json, registerDevice)
 app.post('/device/:deviceId', jsononly, json, contact)
 
 // eslint-disable-next-line no-console
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`ibeacon server listening on http://127.0.0.1:${port}`))
