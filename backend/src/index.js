@@ -1,6 +1,7 @@
 import express from 'express'
 
 import contact from './actions/contact'
+import hello from './actions/hello'
 import registerDevice from './actions/register-device'
 
 const app = express()
@@ -16,9 +17,7 @@ const jsononly = (req, res, next) => {
 
 const json = express.json()
 
-app.get('/', (req, res) => {
-  res.send('ibeacon')
-})
+app.get('/', hello)
 app.post('/device', jsononly, json, registerDevice)
 app.post('/device/:deviceId', jsononly, json, contact)
 
