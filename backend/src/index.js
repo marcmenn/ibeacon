@@ -1,25 +1,15 @@
-import express from 'express'
+import { Server } from './server'
 
-import contact from './actions/contact'
-import hello from './actions/hello'
-import registerDevice from './actions/register-device'
-
-const app = express()
-const port = 3000
-
-const jsononly = (req, res, next) => {
-  if (req.is('json')) {
-    next()
-  } else {
-    res.sendStatus(406)
-  }
+const config = {
+  port: 3000,
 }
 
-const json = express.json()
+const bootstrap = async () => {
+  const server = new Server(config)
+  await server.start()
 
-app.get('/', hello)
-app.post('/device', jsononly, json, registerDevice)
-app.post('/device/:deviceId', jsononly, json, contact)
+  // eslint-disable-next-line no-console
+  console.log(`ibeacon server listening on http://127.0.0.1:${config.port}`)
+}
 
-// eslint-disable-next-line no-console
-app.listen(port, () => console.log(`ibeacon server listening on http://127.0.0.1:${port}`))
+bootstrap()
