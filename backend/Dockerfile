@@ -1,5 +1,5 @@
-FROM node
+FROM node:alpine
 WORKDIR /opt
 COPY . .
-RUN npm install
-CMD ["npm", "start"]
+RUN yarn install
+CMD ["yarn", "start"]
