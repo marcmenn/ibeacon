@@ -7,4 +7,4 @@ dc_build:
 
 .PHONY: start
 start:
-	cd backend; npm run start
+	docker-compose up -d
