@@ -51,10 +51,6 @@ cb_ready: cb_up
 	@($(CB_CLI) bucket-edit $(CB_CLI_OPTS) --bucket "$(CB_BUCKET_NAME)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" &> /dev/null) || \
 	($(CB_CLI) cluster-init --cluster-username "$(CB_USERNAME)" --cluster-password "$(CB_PASSWORD)" && \
 	$(CB_CLI) bucket-create $(CB_CLI_OPTS) --bucket "$(CB_BUCKET_NAME)" --bucket-type "$(CB_BUCKET_TYPE)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)")
-
-.PHONY: cb_test_ready
-npm_test: cb_test_ready
-cb_test_ready: cb_ready
 	@($(CB_CLI) bucket-edit $(CB_CLI_OPTS) --bucket "$(CB_TEST_BUCKET_NAME)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" &> /dev/null) || \
 	$(CB_CLI) bucket-create $(CB_CLI_OPTS) --bucket "$(CB_TEST_BUCKET_NAME)" --bucket-type "$(CB_BUCKET_TYPE)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" --enable-flush 1
 
