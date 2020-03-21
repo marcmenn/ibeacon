@@ -4,7 +4,7 @@ import chai from 'chai'
 
 import { HEALTH_STATUS } from '../../../src/api/health-status.js'
 
-import { getTestHost } from '../../test-api/with-test-server.js'
+import { getTestHost } from '../../test-api/setup.rest-api.js'
 
 const { expect } = chai
 const { HEALTHY, SICK } = HEALTH_STATUS

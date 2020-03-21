@@ -49,6 +49,7 @@ overrides:
 - files:
   - "**/*.rest-api.{js,jsx}"
   - "**/*.unit.{js,jsx}"
+  - "**/*.integration.{js,jsx}"
   env:
     mocha: true
 

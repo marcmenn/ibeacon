@@ -2,7 +2,7 @@ import request from 'supertest'
 import HttpStatus from 'http-status-codes'
 import chai from 'chai'
 
-import { getTestHost } from '../../test-api/with-test-server.js'
+import { getTestHost } from '../../test-api/setup.rest-api.js'
 
 const { expect } = chai
 

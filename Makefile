@@ -79,8 +79,13 @@ npm_lint:
 
 .PHONY: test_unit
 test: test_unit
-test_unit: cb_ready
+test_unit:
 	cd backend; npm run test:unit
+
+.PHONY: test_integration
+test: test_integration
+test_integration: cb_ready
+	cd backend; npm run test:integration
 
 .PHONY: test_rest-api
 test: test_rest-api

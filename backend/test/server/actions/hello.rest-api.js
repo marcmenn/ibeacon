@@ -4,7 +4,7 @@ import chai from 'chai'
 
 import { getVersion } from '../../../src/get-version.js'
 
-import { getTestHost } from '../../test-api/with-test-server.js'
+import { getTestHost } from '../../test-api/setup.rest-api.js'
 
 const { expect } = chai
 
