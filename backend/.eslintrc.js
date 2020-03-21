@@ -17,6 +17,7 @@ module.exports = {
     'operator-linebreak': ['error', 'after', { 'overrides': { '?': 'before', ':': 'before' } }],
     'import/prefer-default-export': 'off',
     'lines-between-class-members': ["error", "always", { exceptAfterSingleLine: true }],
+    'class-methods-use-this': 'off',
     'object-curly-newline': ['error', {
       'ObjectExpression': { 'multiline': true, 'consistent': true },
       'ExportDeclaration': { 'multiline': true, 'consistent': true },
