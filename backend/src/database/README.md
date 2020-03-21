@@ -35,3 +35,19 @@ document:
     }
 }
 ```
+
+### entity: `event`
+
+key: uuid
+
+document:
+
+
+```javascript
+{
+  type: 'register|contact|health-state|...' // type of event
+  timestamp: '' // mandatory server ISO timestamp
+  deviceId: '' // mandatory sending device id
+  payload: {} // type specific payload
+}
+```

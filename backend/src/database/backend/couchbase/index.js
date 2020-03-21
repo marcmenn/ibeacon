@@ -1,7 +1,21 @@
 /* eslint-disable class-methods-use-this */
+import couchbase from 'couchbase'
+import options from './options.js'
+
+const { Cluster } = couchbase
+
 class CouchbaseDatabaseBackend {
-  constructor(config) {
-    this.config = config
+  constructor() {
+    this.cluster = new Cluster(options.connectString, {
+      username: options.username,
+      password: options.password,
+    })
+    this.bucket = this.cluster.bucket(options.bucketName)
+    this.collection = this.bucket.defaultCollection()
+  }
+
+  async close() {
+    await this.cluster.close()
   }
 
   async deleteAll() {
@@ -35,9 +49,7 @@ class CouchbaseDatabaseBackend {
   }
 
   async setItem(dbItemType, itemId, doc) {
-    // to implement
-    // eslint-disable-next-line no-console
-    console.log('to implement', dbItemType, itemId, doc)
+    await this.collection.upsert(itemId, doc)
     return doc
   }
 
