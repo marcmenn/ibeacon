@@ -8,6 +8,7 @@ const run = async () => {
 }
 
 run().catch((e) => {
+  // eslint-disable-next-line no-console
   console.error(e)
   process.exitCode = 1
 }).finally(close)
