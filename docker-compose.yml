@@ -3,5 +3,7 @@ services:
   backend:
     build:
       context: backend
+    ports:
+      - "3443:3443"
   couchbase:
     image: couchbase:community
