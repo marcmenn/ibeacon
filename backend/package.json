@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "lint": "eslint --ext js .",
-    "test": "yarn test:unit && yarn test:rest-api",
-    "test:rest-api": "NODE_TLS_REJECT_UNAUTHORIZED=0 jest --config=test/test-setup/jest.rest-api.config.js .",
-    "test:unit": "jest --config=test/test-setup/jest.unit.config.js .",
+    "test": "npm run test:unit && npm run test:rest-api",
+    "test:rest-api": "NODE_TLS_REJECT_UNAUTHORIZED=0 mocha './test/**/*.rest-api.js'",
+    "test:unit": " mocha './test/**/*.unit.js'",
     "start": "babel-node src/server/index.js https=3443",
     "start:watch": "nodemon --exec babel-node src/server/index.js https=3443 http=3000"
   },
