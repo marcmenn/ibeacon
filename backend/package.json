@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint --ext js .",
-    "test": "yarn test:unit && yarn test:rest-api && yarn lint",
+    "test": "yarn test:unit && yarn test:rest-api",
     "test:rest-api": "NODE_TLS_REJECT_UNAUTHORIZED=0 jest --config=test/test-setup/jest.rest-api.config.js .",
     "test:unit": "jest --config=test/test-setup/jest.unit.config.js .",
     "start": "babel-node src/server/index.js https=3443",
@@ -22,8 +22,7 @@
     "connect": "^3.7.0",
     "express": "^4.17.1",
     "http-status-codes": "^1.4.0",
-    "immutable": "^4.0.0-rc.12",
-    "lodash": "^4.17.15",
+    "mocha": "^7.1.1",
     "react": "^16.13.1",
     "typescript": "^3.8.3"
   },
