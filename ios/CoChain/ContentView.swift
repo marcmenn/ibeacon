@@ -15,43 +15,46 @@ struct Person: Identifiable {
     var name: String
     var infected: Bool
     var risk: Int
-    var distance: CLLocationAccuracy
+    var distance: Float
 }
 
 struct ContentView: View {
     @State var persons = [
-        Person(name: "Peter", infected: false, risk: Int(arc4random() % 100 + 1), distance: -1),
-        Person(name: "Marcus", infected: false, risk: Int(arc4random() % 100 + 1), distance: -1),
-        Person(name: "Lars", infected: true, risk: Int(arc4random() % 100 + 1), distance: -1)
+        Person(name: "nobody met", infected: false, risk: 0, distance: 0)
     ]
 
     @State var me = Person(name: "Me", infected: false, risk: Int(arc4random() % 100 + 1), distance: -1)
+
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
    var body: some View {
        VStack {
            Text("Contact Chain Tracker").bold().font(.largeTitle).padding(5)
            Text("\(me.name): \(me.risk)% ").bold().font(.largeTitle).padding(12).background(me.infected ? Color.red: Color.black).foregroundColor(Color.white).cornerRadius(12.0)
             .padding(100)
-           ForEach(persons) { person in
-            Text("\(person.name): \(person.risk)% ").padding(5).foregroundColor(person.infected ? Color.red : Color.black).background(Color(red: 0.9, green: 0.9, blue: 0.9)).cornerRadius(6.0).padding(5)
-           }
+        if(persons.count > 0) {
+            ForEach(persons) { person in
+                Text("\(person.name): \(person.distance)m ").padding(5).foregroundColor(person.infected ? Color.red : Color.black).background(Color(red: 0.9, green: 0.9, blue: 0.9)).cornerRadius(6.0).padding(5)
+            }
+        }
         Image(systemName: "heart.circle.fill").font(Font.system(.largeTitle)).foregroundColor(me.infected ? Color.red : Color.white).padding(15)
-        Button(action:{self.addPerson()}, label: {Text("Add Person")}).padding(25)
-        Button(action:{self.removePerson()}, label:{Text("Remove Person")})
+        }
+       .onReceive(timer) { _ in
+            self.checkBeacons()
         }
    }
 
-    func addPerson() {
-        persons.append(Person(name: "Stranger", infected: true, risk: 100, distance: -1))
-        me.infected = true
-        me.risk = 100
-    }
+    func checkBeacons() {
+        let sceneDelegate = UIApplication.shared.connectedScenes.first!.delegate as! SceneDelegate
+        sceneDelegate.refreshBeacons()
+        let beacons = sceneDelegate.beacons
 
-    func removePerson() {
-        if (persons.count > 0) {
-            persons.remove(at: persons.count - 1)
-            me.infected = false
-            me.risk = Int(arc4random() % 100 + 1)
+        if (beacons.count > 0) {
+            persons = []
+            for index in 0...beacons.count - 1 {
+                print(beacons[index])
+                persons.append(Person(name: "\(beacons[index].major)_\(beacons[index].minor)", infected: false, risk: Int(beacons[index].accuracy * 100), distance: Float(beacons[index].accuracy)))
+            }
         }
     }
 }
