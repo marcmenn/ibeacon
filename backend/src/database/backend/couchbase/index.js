@@ -28,6 +28,8 @@ export const connect = () => {
   return cluster
 }
 
+export const bucket = (bucketName = options.bucketName) => connect().bucket(bucketName)
+
 export const close = async () => {
   if (cluster) {
     // eslint-disable-next-line no-console
