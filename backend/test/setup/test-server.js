@@ -1,4 +1,4 @@
-import { Server } from '../../src/server'
+import { Server } from '../../src/server/server'
 
 const CONFIG = {
   port: 3001,

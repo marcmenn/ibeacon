@@ -1,8 +1,9 @@
 import request from 'supertest'
 import HttpStatus from 'http-status-codes'
 
-import { getTestHost } from '../setup/test-server'
-import { getVersion } from '../../src/get-version'
+import { getVersion } from '../../../src/get-version'
+
+import { getTestHost } from '../../setup/test-server'
 
 describe('GET /api', () => {
   test('should return name and version', async () => {
