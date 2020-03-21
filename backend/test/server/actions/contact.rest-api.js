@@ -2,13 +2,11 @@ import request from 'supertest'
 import HttpStatus from 'http-status-codes'
 import chai from 'chai'
 
-import { getTestHost, withTestServer } from '../../test-api/with-test-server.js'
+import { getTestHost } from '../../test-api/with-test-server.js'
 
 const { expect } = chai
 
 describe('POST /api/device/:deviceId/contact (contact event)', () => {
-  withTestServer()
-
   it('should return `received` message', async () => {
     const { body } = await request(getTestHost())
       .post('/api/device/deviceIdA/contact')

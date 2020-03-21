@@ -4,13 +4,11 @@ import chai from 'chai'
 
 import { getVersion } from '../../../src/get-version.js'
 
-import { getTestHost, withTestServer } from '../../test-api/with-test-server.js'
+import { getTestHost } from '../../test-api/with-test-server.js'
 
 const { expect } = chai
 
 describe('GET /api', () => {
-  withTestServer()
-
   it('should return name and version', async () => {
     const { body } = await request(getTestHost())
       .get('/api')

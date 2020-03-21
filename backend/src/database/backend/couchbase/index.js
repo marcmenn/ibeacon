@@ -6,6 +6,13 @@ const { Cluster } = couchbase
 
 let cluster = null
 
+export const setBucketName = (bucketName) => {
+  if (cluster !== null) {
+    throw new Error('Couchbase already connected')
+  }
+  options.bucketName = bucketName
+}
+
 export const connect = () => {
   if (cluster === false) {
     throw new Error('Connection to couchbase already closed')

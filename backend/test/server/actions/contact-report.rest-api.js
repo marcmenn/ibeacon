@@ -4,14 +4,12 @@ import chai from 'chai'
 
 import { HEALTH_STATUS } from '../../../src/api/health-status.js'
 
-import { getTestHost, withTestServer } from '../../test-api/with-test-server.js'
+import { getTestHost } from '../../test-api/with-test-server.js'
 
 const { expect } = chai
 const { HEALTHY, SICK } = HEALTH_STATUS
 
 describe('GET /api/device/:deviceId/contact (contact report)', () => {
-  withTestServer()
-
   it('should return all contacts', async () => {
     const { body } = await request(getTestHost())
       .get('/api/device/deviceIdA/contact')
