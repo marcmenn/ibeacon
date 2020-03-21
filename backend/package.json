@@ -8,7 +8,7 @@
     "lint": "eslint --ext js .",
     "test": "npm run lint && npm run test:unit && npm run test:rest-api",
     "test:rest-api": "NODE_TLS_REJECT_UNAUTHORIZED=0 mocha './test/**/*.rest-api.js'",
-    "test:unit": " mocha './test/**/*.unit.js'",
+    "test:unit": "mocha './test/**/*.unit.js'",
     "start": "node src/server/index.js https=3443",
     "start:watch": "nodemon --exec node src/server/index.js https=3443 http=3000"
   },
