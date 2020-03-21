@@ -42,7 +42,7 @@ document: (event type specific)
     payload: {
         beaconId: '' // mandatory string: beacon id of own device
         contactedBeaconId: '' // mandatory string: contacted foreign beacon id
-        distance: 17 // (optional) number: distance between devices (unit: ???)
+        distance: 17 // (optional) number: distance between devices (unit: meter)
     }
 }
 ```
