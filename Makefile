@@ -55,11 +55,6 @@ cb_ready: cb_up
 	$(CB_CLI) bucket-create $(CB_CLI_OPTS) --bucket "$(CB_TEST_BUCKET_NAME)" --bucket-type "$(CB_BUCKET_TYPE)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" --enable-flush 1
 
 .PHONY: test
-test: npm_test
-
-.PHONY: npm_test
-npm_test: cb_ready
-	cd backend; npm test
 
 haproxy/test-https.cert.pem: haproxy/test-https.priv.pem
 	cd haproxy; openssl req -new -x509 -config test-https.cert.cnf -nodes -days 7300 -key test-https.priv.pem -out test-https.cert.pem
@@ -74,3 +69,24 @@ haproxy/test-https.pem: haproxy/test-https.cert.pem haproxy/test-https.priv.pem
 start: haproxy/test-https.pem
 haproxy: haproxy/test-https.pem
 	docker-compose up -d haproxy
+
+.PHONY: lint
+test: lint
+lint: npm_lint
+.PHONY: npm_lint
+npm_lint:
+	cd backend; npm run lint
+
+.PHONY: test_unit
+test: test_unit
+test_unit:
+	cd backend; npm run test:unit
+
+.PHONY: test_rest-api
+test: test_rest-api
+test_rest-api: DC:=docker-compose -f docker-compose.rest.yml -f docker-compose.yml
+test_rest-api: cb_ready
+	@$(DC) up -d --build --force-recreate rest
+	cd backend; REST_URL=http://localhost:3030 npm run test:rest-api
+	@$(DC) stop rest
+	@$(DC) rm -f rest

@@ -1,0 +1,10 @@
+version: "3.6"
+services:
+  rest:
+    environment:
+      CB_BUCKET_NAME: test
+      CB_CONNECT_STRING: couchbase://couchbase
+    build:
+      context: backend
+    ports:
+    - 3030:80
