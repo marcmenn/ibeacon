@@ -26,6 +26,8 @@
 	<string>iBeacon</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>iBeacon</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>iBeacon</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
