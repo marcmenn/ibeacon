@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "lint": "eslint --ext js .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "yarn test:unit && yarn test:rest-api",
+    "test:rest-api": "jest --config=test/setup/jest.rest-api.config.js .",
+    "test:unit": "jest --config=test/setup/jest.unit.config.js .",
     "start": "babel-node src/index.js",
     "start:watch": "nodemon --exec babel-node src/index.js"
   },
@@ -14,7 +16,8 @@
   "license": "MIT",
   "dependencies": {
     "connect": "^3.7.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "http-status-codes": "^1.4.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -31,6 +34,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "jest": "^25.1.0",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "supertest": "^4.0.2"
   }
 }

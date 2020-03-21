@@ -1,3 +1,8 @@
+import { getVersion } from '../get-version'
+
 export default (req, res) => {
-  res.send('ibeacon server')
+  res.send({
+    name: 'ibeacon API',
+    version: getVersion(),
+  })
 }

@@ -40,6 +40,7 @@ module.exports = {
   overrides: [
     {
       files: [
+        '**/*.rest-api.{js,jsx}',
         '**/*.unit.{js,jsx}',
       ],
       env: {
