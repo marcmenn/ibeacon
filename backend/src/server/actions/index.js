@@ -1,8 +1,8 @@
-import { json, jsonCombined } from '../middleware/json'
+import { json, jsonCombined } from '../middleware/json.js'
 
-import contact from './contact'
-import hello from './hello'
-import registerDevice from './register-device'
+import contact from './contact.js'
+import hello from './hello.js'
+import registerDevice from './register-device.js'
 
 const defineActions = (app) => {
   app.get('/', json, hello)

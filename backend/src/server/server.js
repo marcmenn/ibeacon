@@ -2,8 +2,8 @@ import express from 'express'
 import http from 'http'
 import https from 'https'
 
-import { defineActions } from './actions'
-import { getHttpsCertificate } from './https-certificate'
+import { defineActions } from './actions/index.js'
+import { getHttpsCertificate } from './https-certificate/index.js'
 
 class Server {
   constructor(config) {

@@ -1,4 +1,4 @@
-import { Server } from '../../src/server/server'
+import { Server } from '../../src/server/server.js'
 
 const CONFIG = {
   portHttp: 3030,
@@ -14,7 +14,7 @@ const withTestServer = (config = CONFIG) => {
   let testServer
 
   // eslint-disable-next-line no-undef
-  beforeAll(async () => {
+  before(async () => {
     testServer = new Server(config)
     const { urls } = await testServer.start()
     // eslint-disable-next-line prefer-destructuring
@@ -22,7 +22,7 @@ const withTestServer = (config = CONFIG) => {
   })
 
   // eslint-disable-next-line no-undef
-  afterAll(async () => {
+  after(async () => {
     if (testServer) {
       await testServer.stop()
     }

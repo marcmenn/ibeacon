@@ -1,4 +1,4 @@
-import { getVersion } from '../../get-version'
+import { getVersion } from '../../get-version.js'
 
 export default (req, res) => {
   res.send({
