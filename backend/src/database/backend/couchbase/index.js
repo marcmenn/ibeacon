@@ -1,9 +1,9 @@
+/* eslint-disable class-methods-use-this */
 class CouchbaseDatabaseBackend {
   constructor(config) {
     this.config = config
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async deleteAll() {
     // to implement
   }
