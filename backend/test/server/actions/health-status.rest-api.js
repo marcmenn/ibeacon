@@ -16,11 +16,13 @@ describe('POST /api/device/:deviceId/health-state (health-state event)', () => {
       })
       .expect(HttpStatus.OK)
 
-    expect(body).to.deep.equal({
+    expect(body).to.deep.include({
       message: 'received',
       deviceId: 'deviceIdA',
-      timestamp: '2020-03-21T11:48:01.510Z',
-      healthState: 'healthy',
+      payload: {
+        timestamp: '2020-03-21T11:48:01.510Z',
+        healthState: 'healthy',
+      },
     })
   })
 })

@@ -16,11 +16,13 @@ describe('POST /api/device/:deviceId (register event)', () => {
       })
       .expect(HttpStatus.OK)
 
-    expect(body).to.deep.equal({
+    expect(body).to.deep.include({
       message: 'registered',
       deviceId: 'deviceIdA',
-      beaconId: 'beaconIdB',
-      timestamp: '2020-03-21T11:48:01.510Z',
+      payload: {
+        beaconId: 'beaconIdB',
+        timestamp: '2020-03-21T11:48:01.510Z',
+      },
     })
   })
 })

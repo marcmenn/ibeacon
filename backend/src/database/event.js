@@ -10,5 +10,5 @@ export default async (type, deviceId, payload) => {
   const id = v4()
   const event = { type, deviceId, timestamp: timeNow(), payload }
   await collection().insert(id, event)
-  return { id, event }
+  return { id, ...event }
 }
