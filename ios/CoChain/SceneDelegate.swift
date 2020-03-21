@@ -16,8 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    var beacons: [CLBeacon] = []
-    var beacon: CLBeaconRegion?
     var peripheralManager: CBPeripheralManager?
     var location: CLLocationManager?
 
@@ -40,7 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func createBeacon() -> Void {
         let major: CLBeaconMajorValue = CLBeaconMajorValue(arc4random() % 100 + 1)
         let minor: CLBeaconMinorValue = CLBeaconMinorValue(arc4random() % 2 + 1)
-        self.beacon = CLBeaconRegion(uuid: iBeaconConfiguration.uuid, major: major, minor: minor, identifier: "com.menzelapps.CoChain")
+        myBeacon = CLBeaconRegion(uuid: UUID(uuidString: beaconRange)!, major: major, minor: minor, identifier: "com.menzelapps.CoChain")
         self.peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
     }
 
@@ -51,7 +49,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func refreshBeacons() -> Void {
-        let beaconRegion: CLBeaconRegion = CLBeaconRegion(uuid: iBeaconConfiguration.uuid, identifier: "com.menzelapps.CoChain")
+        let beaconRegion: CLBeaconRegion = CLBeaconRegion(uuid: UUID(uuidString: beaconRange)!, identifier: "com.menzelapps.CoChain")
         self.location!.startMonitoring(for: beaconRegion)
     }
 
@@ -84,54 +82,37 @@ extension SceneDelegate: CBPeripheralManagerDelegate {
         }
 
         if state == .poweredOn {
-            print("Broadcast")
-
-            let UUID:UUID = (self.beacon?.uuid)!
-            let serviceUUIDs: Array<CBUUID> = [CBUUID(nsuuid: UUID)]
-
-            // Why NSMutableDictionary can not convert to Dictionary<String, Any> 😂
-            var peripheralData: Dictionary<String, Any> = self.beacon!.peripheralData(withMeasuredPower: nil)  as NSDictionary as! Dictionary<String, Any>
+            let serviceUUIDs: Array<CBUUID> = [CBUUID(nsuuid: myBeacon!.uuid)]
+            var peripheralData: Dictionary<String, Any> = myBeacon!.peripheralData(withMeasuredPower: nil)  as NSDictionary as! Dictionary<String, Any>
             peripheralData[CBAdvertisementDataLocalNameKey] = "Contact Chain"
             peripheralData[CBAdvertisementDataServiceUUIDsKey] = serviceUUIDs
-
             self.peripheralManager!.startAdvertising(peripheralData)
         }
     }
 }
 
 extension SceneDelegate: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus)
-    {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         guard status == .authorizedAlways else {
             print("******** User not authorized !!!!")
             return
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion)
-    {
+    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         manager.requestState(for: region)
     }
 
-    func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion)
-    {
+    func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         if state == .inside {
             manager.startRangingBeacons(in: region as! CLBeaconRegion)
             return
         }
-
         manager.stopRangingBeacons(in: region as! CLBeaconRegion)
     }
 
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
-        self.beacons = beacons
-        if (self.beacons.count > 0) {
-            let bea = self.beacons.first!
-            print("\(bea)")
-            print("accuracy \(bea.accuracy)")
-            print("rssi \(bea.rssi)")
-            print("proximity \(bea.proximity.rawValue)")
-        }
+        beaconList = beacons
         manager.stopRangingBeacons(in: region)
     }
 }

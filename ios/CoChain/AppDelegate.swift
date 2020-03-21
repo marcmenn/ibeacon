@@ -9,21 +9,51 @@
 import UIKit
 import CoreLocation
 
+public struct BeaconEvent {
+    var deviceId: String
+    var beaconId1: String
+    var beaconId2: String
+    var date: Date
+    var distance: Float
+    var duration: Int
+}
+
+public var deviceIdString = ""
+public var beaconIdString = ""
+public var beaconRange = ""
+public var eventList: [BeaconEvent] = []
+public var beaconList: [CLBeacon] = []
+public var myBeacon: CLBeaconRegion?
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
 
     private let locationManager: CLLocationManager = CLLocationManager()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let UUID: UUID = iBeaconConfiguration.uuid
+        self.createUIDs()
 
-        let beaconRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: UUID, identifier: "com.menzelapps.CoChain")
+        let beaconRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: UUID(uuidString: beaconIdString)!, identifier: "com.menzelapps.CoChain")
         beaconRegion.notifyEntryStateOnDisplay = true
 
         self.locationManager.delegate = self
         self.locationManager.startMonitoring(for: beaconRegion)
 
         return true
+    }
+
+    func createUIDs() {
+        deviceIdString = UserDefaults.standard.string(forKey: "deviceIdString") ?? UUID().uuidString
+        UserDefaults.standard.set(deviceIdString, forKey: "deviceIdString")
+        print("deviceId: \(deviceIdString)")
+
+        beaconIdString = UserDefaults.standard.string(forKey: "beaconIdString") ?? UUID().uuidString
+        UserDefaults.standard.set(beaconIdString, forKey: "beaconIdString")
+        print("beaconId: \(beaconIdString)")
+
+        beaconRange = UserDefaults.standard.string(forKey: "beaconRange") ?? "7FA08BC7-A55F-45FC-85C0-0BF26F899530"
+        UserDefaults.standard.set(beaconRange, forKey: "beaconRange")
+        print("beaconRange: \(beaconRange)")
     }
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -34,7 +64,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
 }
 
-class iBeaconConfiguration {
-    static let uuid = UUID(uuidString: "7FA08BC7-A55F-45FC-85C0-0BF26F899530")!
-    private init() {}
-}
