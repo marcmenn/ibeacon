@@ -1,5 +1,5 @@
 import { CouchbaseDatabaseBackend } from '../../../src/database/backend/couchbase/index.js'
-import '../../couchbase.rest-api.js'
+import '../../test-api/with-couchbase.js'
 
 describe('upsert', () => {
   let couchbase = null

@@ -3,7 +3,7 @@ import mocha from 'mocha'
 
 import { connect, setBucketName } from '../../src/database/backend/couchbase/index.js'
 import createApp from '../../src/server/server.js'
-import '../couchbase.rest-api.js'
+import './with-couchbase.js'
 
 const { before, after } = mocha
 const port = 3030
