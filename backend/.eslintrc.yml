@@ -19,6 +19,9 @@ rules:
       "?": before
       ":": before
   import/prefer-default-export: 'off'
+  import/extensions:
+  - error
+  - ignorePackages
   lines-between-class-members:
   - error
   - always
