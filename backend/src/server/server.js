@@ -8,10 +8,11 @@ import { getHttpsCertificate } from './https-certificate'
 class Server {
   constructor(config) {
     this.config = config
+    this.urls = []
   }
 
   async start() {
-    if (!this.http) {
+    if (!this.serverHttp && !this.serverHttps) {
       const {
         httpsCert,
         httpsKey,
@@ -25,6 +26,7 @@ class Server {
       if (portHttp) {
         this.serverHttp = http.createServer(app)
         await new Promise((resolve) => this.serverHttp.listen(portHttp, resolve))
+        this.urls.push(`http://127.0.0.1:${portHttp}`)
       }
 
       if (portHttps) {
@@ -36,7 +38,12 @@ class Server {
 
         this.serverHttps = https.createServer(httpsOptions, app)
         await new Promise((resolve) => this.serverHttps.listen(portHttps, resolve))
+        this.urls.push(`https://127.0.0.1:${portHttps}`)
       }
+    }
+
+    return {
+      urls: this.urls.slice(),
     }
   }
 
@@ -46,11 +53,14 @@ class Server {
         this.serverHttp.close(resolve)
       })
     }
+
     if (this.serverHttps) {
       await new Promise((resolve) => {
         this.serverHttps.close(resolve)
       })
     }
+
+    this.urls = []
   }
 }
 

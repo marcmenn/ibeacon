@@ -12,6 +12,4 @@ module.exports = {
   transform: {
     '^.+\\.jsx?$': 'babel-jest',
   },
-  globalSetup: './test/test-setup/rest-api-setup.js',
-  globalTeardown: './test/test-setup/rest-api-teardown.js',
 }
