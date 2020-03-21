@@ -1,14 +1,17 @@
 import { Server } from '../../src/server/server'
 
 const CONFIG = {
-  port: 3001,
+  portHttps: 3030,
 }
 
-const TEST_HOST = `http://127.0.0.1:${CONFIG.port}`
+const TEST_HOST = `https://127.0.0.1:${CONFIG.portHttps}`
 
 let testServer
 
-const getTestHost = () => TEST_HOST
+const getTestHost = () => {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+  return TEST_HOST
+}
 
 const startTestServer = async () => {
   testServer = new Server(CONFIG)

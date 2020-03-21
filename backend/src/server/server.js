@@ -1,6 +1,9 @@
 import express from 'express'
+import http from 'http'
+import https from 'https'
 
 import { defineActions } from './actions'
+import { getHttpsCertificate } from './https-certificate'
 
 class Server {
   constructor(config) {
@@ -9,27 +12,45 @@ class Server {
 
   async start() {
     if (!this.http) {
-      const { port = 3000 } = this.config
+      const {
+        httpsCert,
+        httpsKey,
+        portHttp,
+        portHttps,
+      } = this.config
       const app = express()
 
       defineActions(app)
 
-      return new Promise((resolve) => {
-        this.http = app.listen(port, resolve)
-      })
-    }
+      if (portHttp) {
+        this.serverHttp = http.createServer(app)
+        await new Promise((resolve) => this.serverHttp.listen(portHttp, resolve))
+      }
 
-    return undefined
+      if (portHttps) {
+        const defaultOptions = getHttpsCertificate()
+        const httpsOptions = {
+          cert: httpsCert || defaultOptions.cert,
+          key: httpsKey || defaultOptions.key,
+        }
+
+        this.serverHttps = https.createServer(httpsOptions, app)
+        await new Promise((resolve) => this.serverHttps.listen(portHttps, resolve))
+      }
+    }
   }
 
   async stop() {
-    if (this.http) {
-      return new Promise((resolve) => {
-        this.http.close(resolve)
+    if (this.serverHttp) {
+      await new Promise((resolve) => {
+        this.serverHttp.close(resolve)
       })
     }
-
-    return undefined
+    if (this.serverHttps) {
+      await new Promise((resolve) => {
+        this.serverHttps.close(resolve)
+      })
+    }
   }
 }
 

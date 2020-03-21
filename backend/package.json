@@ -9,8 +9,8 @@
     "test": "yarn test:unit && yarn test:rest-api",
     "test:rest-api": "jest --config=test/setup/jest.rest-api.config.js .",
     "test:unit": "jest --config=test/setup/jest.unit.config.js .",
-    "start": "babel-node src/server/index.js",
-    "start:watch": "nodemon --exec babel-node src/server/index.js"
+    "start": "babel-node src/server/index.js https=3443",
+    "start:watch": "nodemon --exec babel-node src/server/index.js https=3443 http=3000"
   },
   "author": "",
   "license": "MIT",
