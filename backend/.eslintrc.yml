@@ -1,0 +1,52 @@
+root: true
+env:
+  browser: true
+  es6: true
+extends:
+- airbnb
+parser: babel-eslint
+plugins: []
+rules:
+  semi:
+  - error
+  - never
+  no-console: error
+  no-debugger: error
+  operator-linebreak:
+  - error
+  - after
+  - overrides:
+      "?": before
+      ":": before
+  import/prefer-default-export: 'off'
+  lines-between-class-members:
+  - error
+  - always
+  - exceptAfterSingleLine: true
+  object-curly-newline:
+  - error
+  - ObjectExpression:
+      multiline: true
+      consistent: true
+    ExportDeclaration:
+      multiline: true
+      consistent: true
+  no-restricted-syntax:
+  - error
+  - selector: ForInStatement
+    message: for..in loops iterate over the entire prototype chain, which is virtually
+      never what you want. Use Object.{keys,values,entries}, and iterate over the
+      resulting array.
+  - selector: LabeledStatement
+    message: Labels are a form of GOTO; using them makes code confusing and hard to
+      maintain and understand.
+  - selector: WithStatement
+    message: "`with` is disallowed in strict mode because it makes code impossible
+      to predict and optimize."
+overrides:
+- files:
+  - "**/*.rest-api.{js,jsx}"
+  - "**/*.unit.{js,jsx}"
+  env:
+    jest: true
+
