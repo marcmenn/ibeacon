@@ -38,7 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func createBeacon() -> Void {
         let major: CLBeaconMajorValue = CLBeaconMajorValue(arc4random() % 100 + 1)
         let minor: CLBeaconMinorValue = CLBeaconMinorValue(arc4random() % 2 + 1)
-        myBeacon = CLBeaconRegion(uuid: UUID(uuidString: beaconRange)!, major: major, minor: minor, identifier: "com.menzelapps.CoChain")
+        myBeacon = CLBeaconRegion(uuid: UUID(uuidString: beaconRange)!, major: major, minor: minor, identifier: beaconIdString)
         self.peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
     }
 
@@ -49,7 +49,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func refreshBeacons() -> Void {
-        let beaconRegion: CLBeaconRegion = CLBeaconRegion(uuid: UUID(uuidString: beaconRange)!, identifier: "com.menzelapps.CoChain")
+        let beaconRegion: CLBeaconRegion = CLBeaconRegion(uuid: UUID(uuidString: beaconRange)!, identifier: beaconIdString)
         self.location!.startMonitoring(for: beaconRegion)
     }
 

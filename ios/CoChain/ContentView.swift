@@ -152,6 +152,7 @@ struct ContentView: View {
         if (beaconList.count > 0) {
             persons = []
             for index in 0...beaconList.count - 1 {
+                print(beaconList[index])
                 persons.append(Person(name: "\(beaconList[index].major)_\(beaconList[index].minor)", infected: false, date: Date(), distance: Float(beaconList[index].accuracy), duration: 0))
             }
         }
