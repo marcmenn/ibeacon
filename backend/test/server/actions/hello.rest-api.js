@@ -16,9 +16,15 @@ describe('GET /api', () => {
       .get('/api')
       .expect(HttpStatus.OK)
 
+    // ignore keys couchbase and buckets as they contain runtime diagnostics
+    body.couchbase = null
+    body.buckets = null
+
     expect(body).to.deep.equal({
       name: 'ibeacon API',
       version: getVersion(),
+      couchbase: null,
+      buckets: null,
     })
   })
 })
