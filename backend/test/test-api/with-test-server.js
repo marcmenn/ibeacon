@@ -2,6 +2,7 @@ import http from 'http'
 import mocha from 'mocha'
 
 import createApp from '../../src/server/server.js'
+import '../couchbase.rest-api.js'
 
 const { before, after } = mocha
 const port = 3030
