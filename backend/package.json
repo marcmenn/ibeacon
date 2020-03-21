@@ -7,8 +7,8 @@
   "scripts": {
     "lint": "eslint --ext js .",
     "test": "yarn test:unit && yarn test:rest-api",
-    "test:rest-api": "jest --config=test/setup/jest.rest-api.config.js .",
-    "test:unit": "jest --config=test/setup/jest.unit.config.js .",
+    "test:rest-api": "jest --config=test/test-setup/jest.rest-api.config.js .",
+    "test:unit": "jest --config=test/test-setup/jest.unit.config.js .",
     "start": "babel-node src/server/index.js https=3443",
     "start:watch": "nodemon --exec babel-node src/server/index.js https=3443 http=3000"
   },
