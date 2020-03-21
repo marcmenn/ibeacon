@@ -1,4 +1,4 @@
-package com.example.cochain.ui.home
+package com.example.cochain.ui.query
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.cochain.R
 
-class HomeFragment : Fragment() {
+class QueryFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var queryViewModel: QueryViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
+        queryViewModel =
+                ViewModelProviders.of(this).get(QueryViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_query, container, false)
+        val textView: TextView = root.findViewById(R.id.text_dashboard)
+        queryViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

@@ -1,4 +1,4 @@
-package com.example.cochain.ui.dashboard
+package com.example.cochain.ui.faq
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.cochain.R
 
-class DashboardFragment : Fragment() {
+class FaqFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var faqViewModel: FaqViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
+        faqViewModel =
+                ViewModelProviders.of(this).get(FaqViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_faq, container, false)
+        val textView: TextView = root.findViewById(R.id.text_notifications)
+        faqViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

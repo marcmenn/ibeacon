@@ -3,23 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/startFragment">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.cochain.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_profile"
+        android:name="com.example.cochain.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.cochain.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_query"
+        android:name="com.example.cochain.ui.query.QueryFragment"
+        android:label="@string/title_query"
+        tools:layout="@layout/fragment_query" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.cochain.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_faq"
+        android:name="com.example.cochain.ui.faq.FaqFragment"
+        android:label="@string/title_faq"
+        tools:layout="@layout/fragment_faq" />
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.example.cochain.ui.start.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" />
 </navigation>

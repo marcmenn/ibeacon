@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">CoChain</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_query">Query</string>
+    <string name="title_faq">FAQ</string>
+
+    <string name="start_heading">Help to control SARS-CoV-2</string>
+    <string name="start_subtext">Protect yourself and your fellow men.\nAbsolutely anonymous.\nKeep App running in order to ensure full service.</string>
+    <string name="start_switch_fit">Fit</string>
+    <string name="start_button_how">How does it work?</string>
+
 </resources>
