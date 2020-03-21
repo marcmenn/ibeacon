@@ -16,5 +16,10 @@ export default ({ database }) => async (req, res) => {
     },
   })
 
-  res.send(`received ${deviceId}/${healthState}`)
+  res.send({
+    message: 'received',
+    deviceId,
+    timestamp,
+    healthState,
+  })
 }

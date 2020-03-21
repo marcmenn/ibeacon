@@ -1,5 +1,4 @@
 import express from 'express'
-import connect from 'connect'
 
 const json = express.json()
 
@@ -11,10 +10,7 @@ const jsonOnly = (req, res, next) => {
   }
 }
 
-const jsonCombined = connect([json, jsonOnly])
-
 export {
   json,
-  jsonCombined,
   jsonOnly,
 }

@@ -17,5 +17,11 @@ export default ({ database }) => async (req, res) => {
     },
   })
 
-  res.send(`received ${deviceId}/${beaconId}-${contactedBeaconId}`)
+  res.send({
+    message: 'received',
+    deviceId,
+    timestamp,
+    beaconId,
+    contactedBeaconId,
+  })
 }

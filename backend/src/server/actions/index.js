@@ -1,4 +1,4 @@
-import { json, jsonCombined } from '../middleware/json.js'
+import { json, jsonOnly } from '../middleware/json.js'
 
 import contact from './contact.js'
 import healthState from './health-state.js'
@@ -16,9 +16,9 @@ const middlewareForAsync = (middleware) => async (req, res, next) => {
 const defineActions = (app, context) => {
   app.get('/', json, middlewareForAsync(hello(context)))
   app.get('/api', json, middlewareForAsync(hello(context)))
-  app.post('/api/device/:deviceId', jsonCombined, middlewareForAsync(register(context)))
-  app.post('/api/device/:deviceId/contact', jsonCombined, middlewareForAsync(contact(context)))
-  app.post('/api/device/:deviceId/health-state', jsonCombined, middlewareForAsync(healthState(context)))
+  app.post('/api/device/:deviceId', json, jsonOnly, middlewareForAsync(register(context)))
+  app.post('/api/device/:deviceId/contact', json, jsonOnly, middlewareForAsync(contact(context)))
+  app.post('/api/device/:deviceId/health-state', json, jsonOnly, middlewareForAsync(healthState(context)))
 }
 
 export {

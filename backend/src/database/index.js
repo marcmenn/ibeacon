@@ -12,7 +12,8 @@ class Database {
 
   async saveEvent(eventData) {
     const id = v4()
-    return this.backend.setItem(EVENT, id, eventData)
+    const event = this.backend.setItem(EVENT, id, eventData)
+    return { id, event }
   }
 }
 
