@@ -1,5 +1,5 @@
 import mocha from 'mocha'
-import { collection, connect, close, setBucketName } from '../../src/database/backend/couchbase/index.js'
+import { collection, connect, close, setBucketName } from '../../src/database/couchbase.js'
 
 const { after, before } = mocha
 

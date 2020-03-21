@@ -1,6 +1,13 @@
-/* eslint-disable class-methods-use-this */
 import couchbase from 'couchbase'
-import options from './options.js'
+
+const { CB_USERNAME, CB_PASSWORD, CB_BUCKETNAME, CB_CONNECT_STRING } = process.env
+
+const options = {
+  connectString: CB_CONNECT_STRING || 'couchbase://127.0.0.1?config_total_timeout=60',
+  bucketName: CB_BUCKETNAME || 'default',
+  username: CB_USERNAME || 'username',
+  password: CB_PASSWORD || 'password',
+}
 
 const { Cluster } = couchbase
 

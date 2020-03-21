@@ -1,5 +1,5 @@
 import { getVersion } from '../../get-version.js'
-import { connect } from '../../database/backend/couchbase/index.js'
+import { connect } from '../../database/couchbase.js'
 
 export default () => async (req, res) => {
   const diag = await connect().diagnostics()

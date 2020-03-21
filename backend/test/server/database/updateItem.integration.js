@@ -1,4 +1,4 @@
-import { bucket } from '../../../src/database/backend/couchbase/index.js'
+import { bucket } from '../../../src/database/couchbase.js'
 
 describe('upsert', () => {
   it('should upsert document', async () => {

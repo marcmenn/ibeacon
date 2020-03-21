@@ -1,6 +1,6 @@
 import uuid from 'uuid'
 
-import { collection } from './backend/couchbase/index.js'
+import { collection } from './couchbase.js'
 
 const { v4 } = uuid
 

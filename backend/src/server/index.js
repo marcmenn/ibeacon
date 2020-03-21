@@ -1,7 +1,7 @@
 import http from 'http'
 
 import createApp from './server.js'
-import { connect } from '../database/backend/couchbase/index.js'
+import { connect } from '../database/couchbase.js'
 
 connect()
 const serverHttp = http.createServer(createApp())
