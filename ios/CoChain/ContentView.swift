@@ -37,7 +37,8 @@ struct ContentView: View {
        VStack {
         Image(systemName: "person.circle.fill").font(Font.system(size: 60)).foregroundColor(me.infected ? Color.red : Color.white)
         Text("\(me.infected ? "krank" : "fit")").bold().font(.largeTitle).padding(12).background(me.infected ? Color.red: Color.black).foregroundColor(Color.white).cornerRadius(12.0)
-        Button(action:{self.setState()}, label:{Text("I feel sick!")}).padding(20)
+        Button(action:{self.register()}, label:{Text("register")}).padding(20)
+        Button(action:{self.setState()}, label:{Text(me.infected ? "I feel sick!" : "I feel healthy")}).padding(20)
         Button(action:{self.metOne()}, label:{Text("met one")}).padding(20)
         Button(action:{self.getState()}, label:{Text("get state one")}).padding(20)
         if(persons.count > 0) {
@@ -63,20 +64,43 @@ struct ContentView: View {
         return formatter.string(for: date)!
     }
 
-    func metOne() {
-        let url = NSURL(string: "https://jsonplaceholder.typicode.com/todos/1")! as URL
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-        components.queryItems = [
-            URLQueryItem(name: "deviceId", value: "deviceId"),
-            URLQueryItem(name: "beaconIdMe", value: "beaconId1"),
-            URLQueryItem(name: "beaconIdMet", value: "beaconId2"),
-            URLQueryItem(name: "timestamp", value: "2020=03=12")
-        ]
-        let query = components.url!.query
+    func register() {
+        let url = NSURL(string: "http://192.168.178.72/api/device/\(deviceIdString)")! as URL
+        let json: [String: Any] = ["beaconId": beaconIdString,
+                                   "timestamp": "\(Date())"]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.httpBody = Data(query!.utf8)
+        request.httpBody = jsonData
+        request.allHTTPHeaderFields = ["Content-Type": "application/json"]
+
+        let task = URLSession.shared.dataTask(with: request){data, response, error in
+            guard error == nil && data != nil else {
+                print("error")
+                return
+            }
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200{
+                print("statusCode: \(httpStatus.statusCode)")
+                print("response = \(String(describing: response))")
+            }
+            let responseString = String(data: data!, encoding: String.Encoding.utf8)
+            print("responseString = \(String(describing: responseString))")
+        }
+        task.resume()
+    }
+
+    func metOne() {
+        let url = NSURL(string: "http://192.168.178.72/api/device/\(deviceIdString)/contact")! as URL
+        let json: [String: Any] = ["beaconId": beaconIdString,
+                                   "contactedBeaconId": UUID().uuidString,
+                                   "timestamp": "\(Date())"]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.allHTTPHeaderFields = ["Content-Type": "application/json"]
 
         let task = URLSession.shared.dataTask(with: request){data, response, error in
             guard error == nil && data != nil else {
@@ -94,18 +118,16 @@ struct ContentView: View {
     }
 
     func setState() {
-        let url = NSURL(string: "https://jsonplaceholder.typicode.com/todos/1")! as URL
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-        components.queryItems = [
-            URLQueryItem(name: "deviceId", value: "deviceId"),
-            URLQueryItem(name: "beaconId", value: "beaconId"),
-            URLQueryItem(name: "state", value: "infected")
-        ]
-        let query = components.url!.query
+        me.infected = !me.infected
+        let url = NSURL(string: "http://192.168.178.72/api/device/\(deviceIdString)/health-state")! as URL
+        let json: [String: Any] = ["healthState": me.infected ? "sick" : "healthy",
+                                   "timestamp": "\(Date())"]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.httpBody = Data(query!.utf8)
+        request.httpBody = jsonData
+        request.allHTTPHeaderFields = ["Content-Type": "application/json"]
 
         let task = URLSession.shared.dataTask(with: request){data, response, error in
             guard error == nil && data != nil else {
@@ -123,9 +145,7 @@ struct ContentView: View {
     }
 
     func getState() {
-        me.infected = !me.infected
-
-        let request = NSMutableURLRequest(url: NSURL(string: "https://jsonplaceholder.typicode.com/todos/1")! as URL, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
+        let request = NSMutableURLRequest(url: NSURL(string: "http://192.168.178.72/api/device/\(deviceIdString)/contact")! as URL, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = ["cache-control": "no-cache"]
 
@@ -152,7 +172,7 @@ struct ContentView: View {
         if (beaconList.count > 0) {
             persons = []
             for index in 0...beaconList.count - 1 {
-                print(beaconList[index])
+//                print(beaconList[index])
                 persons.append(Person(name: "\(beaconList[index].major)_\(beaconList[index].minor)", infected: false, date: Date(), distance: Float(beaconList[index].accuracy), duration: 0))
             }
         }
