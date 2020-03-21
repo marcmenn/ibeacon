@@ -13,6 +13,8 @@ services:
     - test-certificate
 
   backend:
+    environment:
+      CB_CONNECT_STRING: couchbase://couchbase
     build:
       context: backend
     ports:

@@ -23,8 +23,8 @@ CB_INFO=($(CB_CLI) server-info $(CB_CLI_OPTS) &> /dev/null) && echo 'Couchbase r
 cb_info:
 	$(CB_CLI) server-info $(CB_CLI_OPTS)
 
-.PHONY: cb_ready
-cb_ready:
+.PHONY: cb_up
+cb_up:
 	@$(CB_INFO) || \
 	(docker-compose up -d couchbase && sleep 2 && $(CB_INFO)) || \
 	(sleep 4 && $(CB_INFO)) || \
@@ -33,8 +33,9 @@ cb_ready:
 	(sleep 4 && $(CB_INFO)) || \
 	(sleep 4 && $(CB_INFO))
 
-.PHONY: cb_init
-cb_init: cb_ready
+.PHONY: cb_ready
+start: cb_ready
+cb_ready: cb_up
 	@($(CB_CLI) bucket-edit $(CB_CLI_OPTS) --bucket "$(CB_BUCKET_NAME)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" &> /dev/null) || \
 	($(CB_CLI) cluster-init --cluster-username "$(CB_USERNAME)" --cluster-password "$(CB_PASSWORD)" && \
 	$(CB_CLI) bucket-create $(CB_CLI_OPTS) --bucket "$(CB_BUCKET_NAME)" --bucket-type "$(CB_BUCKET_TYPE)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)")
@@ -43,7 +44,7 @@ cb_init: cb_ready
 test: npm_test
 
 .PHONY: npm_test
-npm_test: cb_init
+npm_test: cb_ready
 	cd backend; npm test
 
 haproxy/test-https.cert.pem: haproxy/test-https.priv.pem
