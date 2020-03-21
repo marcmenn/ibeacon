@@ -16,7 +16,7 @@ const CONTACTS_DUMMY_DATA = [
 ]
 
 // eslint-disable-next-line no-unused-vars
-export default ({ database }) => async (req, res) => {
+export default () => async (req, res) => {
   // const { deviceId } = req.params
   const filterData = req.query
   const { healthStatus } = filterData
