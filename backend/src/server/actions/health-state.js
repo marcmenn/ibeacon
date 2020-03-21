@@ -5,12 +5,9 @@ import { timeNow } from '../../utility/time-now.js'
 export default () => async (req, res) => {
   const healthStateData = req.body
   const { deviceId } = req.params
-  const { timestamp = timeNow(), healthState, ...payload } = healthStateData
+  const { timestamp = timeNow(), healthState } = healthStateData
 
-  await saveEvent(EVENT_TYPE.HEALTH_STATE, deviceId, timestamp, {
-    healthState,
-    ...payload,
-  })
+  await saveEvent(EVENT_TYPE.HEALTH_STATE, deviceId, healthStateData)
 
   res.send({
     message: 'received',

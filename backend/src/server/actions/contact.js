@@ -5,13 +5,9 @@ import { timeNow } from '../../utility/time-now.js'
 export default () => async (req, res) => {
   const contactData = req.body
   const { deviceId } = req.params
-  const { timestamp = timeNow(), beaconId, contactedBeaconId, ...payload } = contactData
+  const { timestamp = timeNow(), beaconId, contactedBeaconId } = contactData
 
-  await saveEvent(EVENT_TYPE.CONTACT, deviceId, timestamp, {
-    beaconId,
-    contactedBeaconId,
-    ...payload,
-  })
+  await saveEvent(EVENT_TYPE.CONTACT, deviceId, contactData)
 
   res.send({
     message: 'received',
