@@ -1,10 +1,9 @@
+import { EVENT_TYPE } from '../../api/event-type.js'
 import { json, jsonOnly } from '../middleware/json.js'
-
-import contact from './contact.js'
 import contactReport from './contact-report.js'
-import healthState from './health-state.js'
+
+import event from './event.js'
 import hello from './hello.js'
-import register from './register.js'
 
 const middlewareForAsync = (middleware) => async (req, res, next) => {
   try {
@@ -17,10 +16,10 @@ const middlewareForAsync = (middleware) => async (req, res, next) => {
 const defineActions = (app) => {
   app.get('/', json, middlewareForAsync(hello))
   app.get('/api', json, middlewareForAsync(hello))
-  app.post('/api/device/:deviceId', json, jsonOnly, middlewareForAsync(register))
+  app.post('/api/device/:deviceId', json, jsonOnly, middlewareForAsync(event(EVENT_TYPE.REGISTER)))
   app.get('/api/device/:deviceId/contact', json, middlewareForAsync(contactReport))
-  app.post('/api/device/:deviceId/contact', json, jsonOnly, middlewareForAsync(contact))
-  app.post('/api/device/:deviceId/health-state', json, jsonOnly, middlewareForAsync(healthState))
+  app.post('/api/device/:deviceId/contact', json, jsonOnly, middlewareForAsync(event(EVENT_TYPE.CONTACT)))
+  app.post('/api/device/:deviceId/health-state', json, jsonOnly, middlewareForAsync(event(EVENT_TYPE.HEALTH_STATE)))
 }
 
 export {

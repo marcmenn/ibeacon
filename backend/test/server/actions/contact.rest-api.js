@@ -18,7 +18,7 @@ describe('POST /api/device/:deviceId/contact (contact event)', () => {
       .expect(HttpStatus.OK)
 
     expect(body).to.deep.include({
-      message: 'received',
+      type: 'contact',
       deviceId: 'deviceIdA',
       payload: {
         timestamp: '2020-03-21T11:48:01.510Z',

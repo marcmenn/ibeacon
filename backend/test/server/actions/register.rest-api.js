@@ -17,7 +17,7 @@ describe('POST /api/device/:deviceId (register event)', () => {
       .expect(HttpStatus.OK)
 
     expect(body).to.deep.include({
-      message: 'registered',
+      type: 'register',
       deviceId: 'deviceIdA',
       payload: {
         beaconId: 'beaconIdB',
