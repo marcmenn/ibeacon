@@ -11,28 +11,31 @@ const bucketName = 'test'
 
 setBucketName(bucketName)
 
-const getTestHost = () => `http://localhost:${port}`
+const { REST_URL } = process.env
+
+const getTestHost = () => REST_URL || `http://localhost:${port}`
 
 before('flush bucket', async function flushBucket() {
   this.timeout(10000)
-  const [buckets] = await Promise.all([connect().buckets(), connect().bucket(bucketName)])
-  await buckets.flushBucket(bucketName)
+  await connect().buckets().flushBucket(bucketName)
 })
 
-let testServer
+if (!REST_URL) {
+  let testServer
 
-before('start server', async () => {
-  testServer = http.createServer(createApp())
-  await new Promise((resolve) => testServer.listen(port, resolve))
-})
+  before('start server', async () => {
+    testServer = http.createServer(createApp())
+    await new Promise((resolve) => testServer.listen(port, resolve))
+  })
 
-after('stop server', async () => {
-  if (testServer) {
-    await new Promise((resolve) => testServer.close(resolve))
-  }
+  after('stop server', async () => {
+    if (testServer) {
+      await new Promise((resolve) => testServer.close(resolve))
+    }
 
-  testServer = undefined
-})
+    testServer = undefined
+  })
+}
 
 export {
   getTestHost,
