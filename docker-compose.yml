@@ -25,7 +25,13 @@ services:
     ports:
     - "8091-8094:8091-8094"
     - "11210:11210"
+    volumes:
+    - cochain-data:/opt/couchbase/var
 
 secrets:
   test-certificate:
     file: ./haproxy/test-https.pem
+
+volumes:
+  cochain-data:
+    external: true

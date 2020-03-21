@@ -46,6 +46,10 @@ cb_up:
 	(sleep 4 && $(CB_INFO)) || \
 	(sleep 4 && $(CB_INFO))
 
+.PHONY: cb_volume
+cb_volume:
+	@docker volume inspect cochain-data &> /dev/null || docker volume create --name=cochain-data
+
 .PHONY: cb_ready
 start: cb_ready
 cb_buckets: cb_up
@@ -56,7 +60,7 @@ cb_buckets: cb_up
 	@($(CB_CLI) bucket-edit $(CB_CLI_OPTS) --bucket "$(CB_TEST_BUCKET_NAME)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" &> /dev/null) || \
 	$(CB_CLI) bucket-create $(CB_CLI_OPTS) --bucket "$(CB_TEST_BUCKET_NAME)" --bucket-type "$(CB_BUCKET_TYPE)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" --enable-flush 1 && \
 	$(CLEAN_VIEWS)
-cb_ready: cb_buckets views
+cb_ready: cb_volume cb_buckets views
 
 .PHONY: test
 
