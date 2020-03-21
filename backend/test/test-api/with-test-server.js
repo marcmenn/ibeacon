@@ -1,3 +1,5 @@
+import { Database } from '../../src/database/index.js'
+import { MockDatabaseBackend } from '../../src/database/backend/mock/index.js'
 import { Server } from '../../src/server/server.js'
 
 const CONFIG = {
@@ -15,7 +17,10 @@ const withTestServer = (config = CONFIG) => {
 
   // eslint-disable-next-line no-undef
   before(async () => {
-    testServer = new Server(config)
+    const databaseBackend = new MockDatabaseBackend()
+    const database = new Database(databaseBackend)
+    const context = { database }
+    testServer = new Server(config, context)
     const { urls } = await testServer.start()
     // eslint-disable-next-line prefer-destructuring
     testHost = urls[0]

@@ -1,12 +1,12 @@
-import { Map } from 'immutable'
+import Immutable from 'immutable'
 
 class MockDatabaseBackend {
   constructor() {
-    this.itemMapByType = new Map()
+    this.itemMapByType = new Immutable.Map()
   }
 
   async deleteAll() {
-    this.itemMapByType = new Map()
+    this.itemMapByType = new Immutable.Map()
   }
 
   async deleteAllOfItemType(dbItemType) {

@@ -2,20 +2,19 @@ import { EVENT_TYPE } from '../../api/event-type.js'
 import { timeNow } from '../../utility/time-now.js'
 
 export default ({ database }) => async (req, res) => {
-  const contactData = req.body
+  const healthStateData = req.body
   const { deviceId } = req.params
-  const { timestamp = timeNow(), beaconId, contactedBeaconId, ...payload } = contactData
+  const { timestamp = timeNow(), healthState, ...payload } = healthStateData
 
   await database.saveEvent({
-    type: EVENT_TYPE.CONTACT,
+    type: EVENT_TYPE.HEALTH_STATE,
     deviceId,
     timestamp,
     payload: {
-      beaconId,
-      contactedBeaconId,
+      healthState,
       ...payload,
     },
   })
 
-  res.send(`received ${deviceId}/${beaconId}-${contactedBeaconId}`)
+  res.send(`received ${deviceId}/${healthState}`)
 }

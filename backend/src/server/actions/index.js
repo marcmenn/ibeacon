@@ -1,14 +1,16 @@
 import { json, jsonCombined } from '../middleware/json.js'
 
 import contact from './contact.js'
+import healthState from './health-state.js'
 import hello from './hello.js'
-import registerDevice from './register-device.js'
+import register from './register.js'
 
-const defineActions = (app) => {
-  app.get('/', json, hello)
-  app.get('/api', json, hello)
-  app.post('/api/device', jsonCombined, registerDevice)
-  app.post('/api/device/:deviceId', jsonCombined, contact)
+const defineActions = (app, context) => {
+  app.get('/', json, hello(context))
+  app.get('/api', json, hello(context))
+  app.post('/api/device/:deviceId', jsonCombined, register(context))
+  app.post('/api/device/:deviceId/contact', jsonCombined, contact(context))
+  app.post('/api/device/:deviceId/health-state', jsonCombined, healthState(context))
 }
 
 export {

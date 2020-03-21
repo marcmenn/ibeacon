@@ -4,34 +4,57 @@
 
 entity types (collections:
 
-- person
+- event
 
-### entity: `person`
+### entity: `event`
 
-key: beaconId
+key: uuid
 
-document:
+document: (event type specific)
 
 ```javascript
 {
-    beaconId: '' // mandatory string: beacon id (primary document id)
+    type: 'register|contact|health-state' // event type
     deviceId: '' // mandatory string: device id
-    registerTime: '' // mandatory ISO timestamp: timestamp of registration of person
-    infected: false, // mandatory boolean: infection status
-    infectReportTime: '', // optional ISO timestamp: timestamp of reporting the positive infection state
-    infectedSinceTime: '', // optional ISO timestamp: timestamp of estimated infection
-    infectHealedTime: '' // optional ISO timestamp string: timestamp of reporting the negative infection state (after positive)
-    contactsByPerson: { // mandatory map of all contacts grouped by contact person
-        beaconId: [ // mandatory string key: beacon id of contacted person => array of contacts (ordered by `time`)
-            {
-                id: '', // mandatory string: UUID to identify sibling "identic" contact entry on other contacted person
-                time: '', // mandatory ISO timestamp string: timestamp beacon (contact) was received
-                beaconId: '', // mandatory string: beacon id of contact
-                distance: 17, // (optional) number: distance between two persons (unit: ???)
-                duration: 11, // (optional) number: duration of contact (unit: seconds)
-                ... // other infos (geolocation ...)
-            }
-        ]
+    timestamp: '' // mandatory ISO timestamp of event
+    payload: {} // event type specific payload
+}
+```
+
+#### event type `register`
+
+```javascript
+{
+    type: 'register' // event type
+    ... // standard event props
+    payload: {
+      beaconId: '' // mandatory string: beacon id of own device
+    }
+}
+```
+
+#### event type `contact`
+
+```javascript
+{
+    type: 'contact' // event type
+    ... // standard event props
+    payload: {
+        beaconId: '' // mandatory string: beacon id of own device
+        contactedBeaconId: '' // mandatory string: contacted foreign beacon id
+        distance: 17 // (optional) number: distance between devices (unit: ???)
+    }
+}
+```
+
+#### event type `health-state`
+
+```javascript
+{
+    type: 'health-state' // event type
+    ... // standard event props
+    payload: {
+      healthState: 'healthy|sick|maybe' // mandatory boolean: health state
     }
 }
 ```

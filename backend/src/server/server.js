@@ -6,8 +6,9 @@ import { defineActions } from './actions/index.js'
 import { getHttpsCertificate } from './https-certificate/index.js'
 
 class Server {
-  constructor(config) {
+  constructor(config, context = {}) {
     this.config = config
+    this.context = context
     this.urls = []
   }
 
@@ -21,7 +22,7 @@ class Server {
       } = this.config
       const app = express()
 
-      defineActions(app)
+      defineActions(app, this.context)
 
       if (portHttp) {
         this.serverHttp = http.createServer(app)

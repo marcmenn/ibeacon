@@ -1,3 +1,6 @@
+import { Database } from '../database/index.js'
+import { MockDatabaseBackend } from '../database/backend/mock/index.js'
+
 import { Server } from './server.js'
 
 const partArguments = () => {
@@ -32,7 +35,11 @@ const bootstrap = async () => {
     urls.push(`https://127.0.0.1:${config.portHttps}`)
   }
 
-  const server = new Server(config)
+  const databaseBackend = new MockDatabaseBackend() // TODO: replace by couchbase backend
+  const database = new Database(databaseBackend)
+  const context = { database }
+  const server = new Server(config, context)
+
   await server.start()
 
   for (const url of urls) {
