@@ -4,18 +4,37 @@ import options from './options.js'
 
 const { Cluster } = couchbase
 
-class CouchbaseDatabaseBackend {
-  constructor() {
-    this.cluster = new Cluster(options.connectString, {
+let cluster = null
+
+export const connect = () => {
+  if (cluster === false) {
+    throw new Error('Connection to couchbase already closed')
+  }
+  if (cluster === null) {
+    // eslint-disable-next-line no-console
+    console.log('Connecting to couchbase')
+    cluster = new Cluster(options.connectString, {
       username: options.username,
       password: options.password,
     })
-    this.bucket = this.cluster.bucket(options.bucketName)
-    this.collection = this.bucket.defaultCollection()
   }
+  return cluster
+}
 
-  async close() {
-    await this.cluster.close()
+export const close = async () => {
+  if (cluster) {
+    // eslint-disable-next-line no-console
+    console.log('Closing couchbase connection')
+    await cluster.close()
+    cluster = false
+  }
+}
+
+class CouchbaseDatabaseBackend {
+  constructor() {
+    if (!cluster) throw new Error('Connection to couchbase not established')
+    this.bucket = cluster.bucket(options.bucketName)
+    this.collection = this.bucket.defaultCollection()
   }
 
   async deleteAll() {

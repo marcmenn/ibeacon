@@ -7,10 +7,6 @@ describe('upsert', () => {
     couchbase = new CouchbaseDatabaseBackend()
   })
 
-  after(async () => {
-    await couchbase.close()
-  })
-
   it('should upsert document', async () => {
     await couchbase.setItem('type', 'a', { b: 'c' })
   })
