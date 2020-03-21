@@ -8,7 +8,7 @@ const bucketName = 'test'
 setBucketName(bucketName)
 
 before('Connecting to couchbase', async function connectCouchbase() {
-  this.timeout(10000)
+  this.timeout(60000)
   await collection().exists('test')
   await connect().buckets().getAllBuckets()
 })
