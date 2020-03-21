@@ -1,7 +1,9 @@
 import { Map } from 'immutable'
 
 class MockDatabaseBackend {
-  itemMapByType = new Map()
+  constructor() {
+    this.itemMapByType = new Map()
+  }
 
   async deleteAll() {
     this.itemMapByType = new Map()

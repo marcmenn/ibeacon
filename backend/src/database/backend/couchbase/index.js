@@ -1,6 +1,4 @@
 class CouchbaseDatabaseBackend {
-  config = {}
-
   constructor(config) {
     this.config = config
   }

@@ -1,12 +1,17 @@
-import { timeNow } from '../utility/time-now'
+import { timeNow } from '../utility/time-now.js'
 
-import { DB_ITEM_TYPE } from './backend/backend-constants'
+import { DB_ITEM_TYPE } from './backend/backend-constants.js'
 
 const { PERSON } = DB_ITEM_TYPE
 
-class Database {
-  backend = undefined
+const nullish = (...args) => {
+  for (const x of args) {
+    if (x !== undefined && x !== null) return x
+  }
+  return null
+}
 
+class Database {
   constructor(backend) {
     this.backend = backend
   }
@@ -29,19 +34,19 @@ class Database {
 
     if (personDoc) {
       return this.backend.updateItem(PERSON, beaconId, (doc) => {
-        const newInfected = infected ?? doc.infected
+        const newInfected = nullish(infected, doc.infected)
 
         return {
           ...doc,
-          deviceId: deviceId ?? doc.deviceId,
-          registerTime: doc.registerTime ?? registerTime ?? timeNow(),
+          deviceId: nullish(deviceId, doc.deviceId),
+          registerTime: nullish(doc.registerTime, registerTime, timeNow()),
           infected: newInfected,
-          infectReportTime: (
-            infectReportTime ??
-            doc.infectReportTime ??
-            (newInfected ? timeNow() : undefined)
+          infectReportTime: nullish(
+            infectReportTime,
+            doc.infectReportTime,
+            (newInfected ? timeNow() : undefined),
           ),
-          infectedSinceTime: infectedSinceTime ?? doc.infectedSinceTime,
+          infectedSinceTime: nullish(infectedSinceTime, doc.infectedSinceTime),
         }
       })
     }
@@ -49,9 +54,9 @@ class Database {
     return this.backend.setItem(PERSON, beaconId, {
       beaconId,
       deviceId,
-      registerTime: registerTime ?? timeNow(),
-      infected: infected ?? false,
-      infectReportTime: infectReportTime ?? (infected ? timeNow() : undefined),
+      registerTime: nullish(registerTime, timeNow()),
+      infected: nullish(infected, false),
+      infectReportTime: nullish(infectReportTime, (infected ? timeNow() : undefined)),
       infectedSinceTime,
       contactsByPerson: {},
     })
