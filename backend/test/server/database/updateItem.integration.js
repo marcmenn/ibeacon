@@ -1,7 +1,7 @@
-import { bucket } from '../../../src/database/couchbase.js'
+import { collection } from '../../../src/database/couchbase.js'
 
 describe('upsert', () => {
   it('should upsert document', async () => {
-    await bucket().defaultCollection().upsert('a', { b: 'c' })
+    await collection().upsert('a', { b: 'c' })
   })
 })

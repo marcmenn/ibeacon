@@ -26,7 +26,7 @@ export const connect = () => {
   }
   if (cluster === null) {
     // eslint-disable-next-line no-console
-    console.log('Connecting to couchbase')
+    console.log(`Connecting to couchbase bucket ${options.bucketName}`)
     cluster = new Cluster(options.connectString, {
       username: options.username,
       password: options.password,
@@ -35,7 +35,7 @@ export const connect = () => {
   return cluster
 }
 
-export const bucket = (bucketName = options.bucketName) => connect().bucket(bucketName)
+export const bucket = () => connect().bucket(options.bucketName)
 export const collection = () => bucket().defaultCollection()
 
 export const close = async () => {
