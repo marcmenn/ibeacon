@@ -1,5 +1,5 @@
 import mocha from 'mocha'
-import { bucket, connect, close, setBucketName } from '../../src/database/backend/couchbase/index.js'
+import { collection, connect, close, setBucketName } from '../../src/database/backend/couchbase/index.js'
 
 const { after, before } = mocha
 
@@ -9,7 +9,7 @@ setBucketName(bucketName)
 
 before('Connecting to couchbase', async function connectCouchbase() {
   this.timeout(10000)
-  bucket()
+  await collection().exists('test')
   await connect().buckets().getAllBuckets()
 })
 
