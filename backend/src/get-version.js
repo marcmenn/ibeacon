@@ -1,4 +1,6 @@
-import packageJson from '../package.json'
+import fs from 'fs'
+
+const packageJson = JSON.parse(fs.readFileSync('package.json'))
 
 const getVersion = () => packageJson.version
 
