@@ -1,51 +1,11 @@
-import { Database } from '../database/index.js'
-import { MockDatabaseBackend } from '../database/backend/mock/index.js'
+import http from 'http'
 
-import { Server } from './server.js'
+import createApp from './server.js'
 
-const partArguments = () => {
-  const args = {}
+const serverHttp = http.createServer(createApp())
+const port = 80
 
-  for (const arg of process.argv.slice(2)) {
-    const [name, value] = arg.split('=')
-    args[name] = value || ''
-  }
-
-  return args
-}
-
-const bootstrap = async () => {
-  const config = {}
-  const args = partArguments()
-  const urls = []
-  const startHttp = 'http' in args
-  let startHttps = 'https' in args
-
-  if (!startHttp && !startHttps) {
-    startHttps = true
-  }
-
-  if (startHttp) {
-    config.portHttp = args.http || 80
-    urls.push(`http://127.0.0.1:${config.portHttp}`)
-  }
-
-  if (startHttps) {
-    config.portHttps = args.https || 443
-    urls.push(`https://127.0.0.1:${config.portHttps}`)
-  }
-
-  const databaseBackend = new MockDatabaseBackend() // TODO: replace by couchbase backend
-  const database = new Database(databaseBackend)
-  const context = { database }
-  const server = new Server(config, context)
-
-  await server.start()
-
-  for (const url of urls) {
-    // eslint-disable-next-line no-console
-    console.log(`ibeacon server listening on ${url}`)
-  }
-}
-
-bootstrap()
+serverHttp.listen(port, () => {
+  // eslint-disable-next-line no-console
+  console.log(`cochaine listening on port ${port}`)
+})
