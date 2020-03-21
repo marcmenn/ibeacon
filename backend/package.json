@@ -28,13 +28,6 @@
     "typescript": "^3.8.3"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.0",
-    "@babel/node": "^7.8.7",
-    "@babel/preset-env": "^7.9.0",
-    "@babel/register": "^7.9.0",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^25.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-import": "^2.20.1",
@@ -42,7 +35,6 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
-    "jest": "^25.1.0",
     "nodemon": "^2.0.2",
     "supertest": "^4.0.2"
   }
