@@ -1,0 +1,20 @@
+{
+  "name": "ibeacon-views",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {},
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=13",
+    "yarn": "YARN NO LONGER USED - use npm instead."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "eval": "^0.1.4"
+  }
+}

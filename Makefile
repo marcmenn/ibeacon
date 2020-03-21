@@ -20,6 +20,7 @@ dc_build:
 start:
 	docker-compose up -d
 
+CLEAN_VIEWS:=rm -rf views/build
 CB_CLUSTER=localhost
 CB_USERNAME=username
 CB_PASSWORD=password
@@ -47,12 +48,15 @@ cb_up:
 
 .PHONY: cb_ready
 start: cb_ready
-cb_ready: cb_up
+cb_buckets: cb_up
 	@($(CB_CLI) bucket-edit $(CB_CLI_OPTS) --bucket "$(CB_BUCKET_NAME)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" &> /dev/null) || \
 	($(CB_CLI) cluster-init --cluster-username "$(CB_USERNAME)" --cluster-password "$(CB_PASSWORD)" && \
-	$(CB_CLI) bucket-create $(CB_CLI_OPTS) --bucket "$(CB_BUCKET_NAME)" --bucket-type "$(CB_BUCKET_TYPE)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)")
+	$(CB_CLI) bucket-create $(CB_CLI_OPTS) --bucket "$(CB_BUCKET_NAME)" --bucket-type "$(CB_BUCKET_TYPE)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" && \
+	$(CLEAN_VIEWS))
 	@($(CB_CLI) bucket-edit $(CB_CLI_OPTS) --bucket "$(CB_TEST_BUCKET_NAME)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" &> /dev/null) || \
-	$(CB_CLI) bucket-create $(CB_CLI_OPTS) --bucket "$(CB_TEST_BUCKET_NAME)" --bucket-type "$(CB_BUCKET_TYPE)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" --enable-flush 1
+	$(CB_CLI) bucket-create $(CB_CLI_OPTS) --bucket "$(CB_TEST_BUCKET_NAME)" --bucket-type "$(CB_BUCKET_TYPE)" --bucket-ramsize "$(CB_BUCKET_RAMSIZE)" --enable-flush 1 && \
+	$(CLEAN_VIEWS)
+cb_ready: cb_buckets views
 
 .PHONY: test
 
@@ -95,3 +99,16 @@ test_rest-api: cb_ready
 	cd backend; REST_URL=http://localhost:3030 npm run test:rest-api
 	@$(DC) stop rest
 	@$(DC) rm -f rest
+
+.PHONY: clean
+clean:
+	$(CLEAN_VIEWS)
+
+build: views
+
+.PHONY: views
+views: views/build/views.json
+views/build/views.json: views/views.js
+	cd views; mkdir -p build; node . > build/views.json
+	node backend/src/database/upsert-views.js
+	CB_BUCKETNAME=test node backend/src/database/upsert-views.js
