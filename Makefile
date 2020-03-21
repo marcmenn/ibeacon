@@ -1,3 +1,14 @@
+.PHONY: default
+default: start
+
+.PHONY: stop
+stop:
+	docker-compose stop
+
+.PHONY: down
+down:
+	docker-compose down -v
+
 .PHONY: build
 build: dc_build
 
