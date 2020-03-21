@@ -1,12 +1,29 @@
-version: "3.4"
+version: "3.6"
 services:
+  haproxy:
+    restart: always
+    image: haproxy
+    volumes:
+    - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    ports:
+    - 443:443
+    ulimits:
+      nofile: 8192
+    secrets:
+    - test-certificate
+
   backend:
     build:
       context: backend
     ports:
-      - "3443:3443"
+    - 80:80
+
   couchbase:
     image: couchbase:community
     ports:
     - "8091-8094:8091-8094"
     - "11210:11210"
+
+secrets:
+  test-certificate:
+    file: ./haproxy/test-https.pem

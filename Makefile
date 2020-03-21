@@ -45,3 +45,17 @@ test: npm_test
 .PHONY: npm_test
 npm_test: cb_init
 	cd backend; npm test
+
+haproxy/test-https.cert.pem: haproxy/test-https.priv.pem
+	cd haproxy; openssl req -new -x509 -config test-https.cert.cnf -nodes -days 7300 -key test-https.priv.pem -out test-https.cert.pem
+
+haproxy/test-https.priv.pem:
+	cd haproxy; openssl genrsa -out test-https.priv.pem 2048
+
+haproxy/test-https.pem: haproxy/test-https.cert.pem haproxy/test-https.priv.pem
+	cat haproxy/test-https.cert.pem haproxy/test-https.priv.pem > haproxy/test-https.pem
+
+.PHONY: haproxy
+start: haproxy/test-https.pem
+haproxy: haproxy/test-https.pem
+	docker-compose up -d haproxy
