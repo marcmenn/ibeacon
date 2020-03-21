@@ -32,13 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.createUIDs()
-
-        let beaconRegion: CLBeaconRegion = CLBeaconRegion(proximityUUID: UUID(uuidString: beaconIdString)!, identifier: beaconIdString)
-        beaconRegion.notifyEntryStateOnDisplay = true
-
         self.locationManager.delegate = self
-        self.locationManager.startMonitoring(for: beaconRegion)
-
         return true
     }
 
