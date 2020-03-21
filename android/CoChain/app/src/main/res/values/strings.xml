@@ -9,4 +9,13 @@
     <string name="start_switch_fit">Fit</string>
     <string name="start_button_how">How does it work?</string>
 
+    <string name="contactViewTextDate">Date:\n{}</string>
+    <string name="contactViewTextDuration">Duration:\n{}</string>
+    <string name="contactViewTextDistance">Distance:\n{}</string>
+    <string name="contactViewAvatarDescription">avatar</string>
+    <string name="query_heading">Collect</string>
+    <string name="query_subtext">Your query of risks</string>
+    <string name="query_status">Status:\n{}</string>
+    <string name="query_avatar">Avatar</string>
+
 </resources>
