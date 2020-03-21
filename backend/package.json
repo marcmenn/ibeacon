@@ -15,7 +15,7 @@
   "author": "",
   "license": "MIT",
   "engines": {
-    "node": ">13",
+    "node": ">=13",
     "yarn": "YARN NO LONGER USED - use npm instead."
   },
   "dependencies": {

@@ -1,6 +1,6 @@
-FROM node:11-alpine
+FROM node
 EXPOSE 3443
 WORKDIR /opt
 COPY . .
-RUN yarn install --frozen-lockfile
-CMD ["yarn", "start"]
+RUN npm ci
+CMD ["npm", "run start"]
