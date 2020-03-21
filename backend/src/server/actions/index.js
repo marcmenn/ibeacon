@@ -15,12 +15,12 @@ const middlewareForAsync = (middleware) => async (req, res, next) => {
 }
 
 const defineActions = (app) => {
-  app.get('/', json, middlewareForAsync(hello()))
-  app.get('/api', json, middlewareForAsync(hello()))
-  app.post('/api/device/:deviceId', json, jsonOnly, middlewareForAsync(register()))
-  app.get('/api/device/:deviceId/contact', json, middlewareForAsync(contactReport()))
-  app.post('/api/device/:deviceId/contact', json, jsonOnly, middlewareForAsync(contact()))
-  app.post('/api/device/:deviceId/health-state', json, jsonOnly, middlewareForAsync(healthState()))
+  app.get('/', json, middlewareForAsync(hello))
+  app.get('/api', json, middlewareForAsync(hello))
+  app.post('/api/device/:deviceId', json, jsonOnly, middlewareForAsync(register))
+  app.get('/api/device/:deviceId/contact', json, middlewareForAsync(contactReport))
+  app.post('/api/device/:deviceId/contact', json, jsonOnly, middlewareForAsync(contact))
+  app.post('/api/device/:deviceId/health-state', json, jsonOnly, middlewareForAsync(healthState))
 }
 
 export {

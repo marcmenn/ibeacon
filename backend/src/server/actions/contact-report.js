@@ -15,8 +15,7 @@ const CONTACTS_DUMMY_DATA = [
   { timestamp: '2020-03-18T08:48:01.510Z', healthStatus: SICK, distance: 9.1, duration: 76 },
 ]
 
-// eslint-disable-next-line no-unused-vars
-export default () => async (req, res) => {
+export default async (req, res) => {
   // const { deviceId } = req.params
   const filterData = req.query
   const { healthStatus } = filterData
