@@ -29,6 +29,7 @@ export const connect = () => {
 }
 
 export const bucket = (bucketName = options.bucketName) => connect().bucket(bucketName)
+export const collection = () => bucket().defaultCollection()
 
 export const close = async () => {
   if (cluster) {
@@ -40,12 +41,6 @@ export const close = async () => {
 }
 
 class CouchbaseDatabaseBackend {
-  constructor() {
-    if (!cluster) throw new Error('Connection to couchbase not established')
-    this.bucket = cluster.bucket(options.bucketName)
-    this.collection = this.bucket.defaultCollection()
-  }
-
   async deleteAll() {
     // to implement
   }
@@ -77,7 +72,7 @@ class CouchbaseDatabaseBackend {
   }
 
   async setItem(dbItemType, itemId, doc) {
-    await this.collection.upsert(itemId, doc)
+    await collection().upsert(itemId, doc)
     return doc
   }
 
