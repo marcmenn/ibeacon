@@ -9,6 +9,10 @@ import hello from './hello.js'
 
 const defineActions = (app) => {
   app.use(addRequestId())
+  app.use((req, res, next) => {
+    if (!req.context) req.context = {}
+    next()
+  })
   app.get('/', json, hello)
   app.get('/api', json, hello)
   app.post('/api/device/:deviceId', withDeviceId, json, jsonOnly, event(EVENT_TYPE.REGISTER))
