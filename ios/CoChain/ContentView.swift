@@ -62,12 +62,12 @@ struct ContentView: View {
     }
 
     func reportContact() {
-        postCall(route: "contact", parameters: ["beaconId": beaconIdString,"contactedBeaconId": UUID().uuidString,"timestamp": "\(Date())"], completion: showAlert)
+        postCall(route: "contact", parameters: ["beaconId": beaconIdString,"contactedBeaconId": UUID().uuidString,"timestamp": "\(formatedUTC(date: Date()))"], completion: showAlert)
     }
 
     func healthState() {
         me.infected = !me.infected
-        postCall(route: "health-state", parameters: ["healthState": me.infected ? "sick" : "healthy","timestamp": "\(Date())"], completion: showAlert)
+        postCall(route: "health-state", parameters: ["healthState": me.infected ? "sick" : "healthy","timestamp": "\(formatedUTC(date: Date()))"], completion: showAlert)
     }
 
     func getContacts() {
