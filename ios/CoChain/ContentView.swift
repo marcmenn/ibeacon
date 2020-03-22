@@ -62,7 +62,7 @@ struct ContentView: View {
     }
 
     func reportContact() {
-        postCall(route: "contact", parameters: ["beaconId": beaconIdString,"contactedBeaconId": UUID().uuidString,"timestamp": "\(formatedUTC(date: Date()))"], completion: showAlert)
+        postCall(route: "contact", parameters: ["beaconId": beaconIdString,"contactedBeaconId": UUID().uuidString,"timestamp": "\(formatedUTC(date: Date()))","distance": Double.random(min: 0.10, max: 5.00)], completion: showAlert)
     }
 
     func healthState() {
