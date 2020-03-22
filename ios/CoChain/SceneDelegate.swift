@@ -31,8 +31,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.createLocationManageer()
             self.refreshBeacons()
 
+            self.register()
+
             window.makeKeyAndVisible()
         }
+    }
+
+    func showResult(result: Any) {
+        print(result)
+    }
+
+    func register() {
+        postCall(route: "", parameters: ["beaconId": beaconIdString,"timestamp": "\(Date())"], completion: showResult)
     }
 
     func createBeacon() -> Void {

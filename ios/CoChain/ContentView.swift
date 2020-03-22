@@ -21,7 +21,6 @@ struct ContentView: View {
        VStack {
         Image(systemName: "person.circle.fill").font(Font.system(size: 60)).foregroundColor(me.infected ? Color.red : Color.white)
         Text("\(me.infected ? "krank" : "fit")").bold().font(.largeTitle).padding(12).background(me.infected ? Color.red: Color.black).foregroundColor(Color.white).cornerRadius(12.0)
-        Button(action:{self.register()}, label:{Text("register")}).padding(20)
         Button(action:{self.reportContact()}, label:{Text("report contact")}).padding(20)
         Button(action:{self.healthState()}, label:{Text(me.infected ? "I feel healthy" : "I feel sick!")}).padding(20)
         Button(action:{self.getContacts()}, label:{Text("get contacts")}).padding(20)
@@ -57,13 +56,9 @@ struct ContentView: View {
         }
     }
 
-    func showAlert(text: String) {
-        self.alertText = text
+    func showAlert(text: Any) {
+        self.alertText = "\(text)"
         self.showingAlert = true
-    }
-
-    func register() {
-        postCall(route: "", parameters: ["beaconId": beaconIdString,"timestamp": "\(Date())"], completion: showAlert)
     }
 
     func reportContact() {

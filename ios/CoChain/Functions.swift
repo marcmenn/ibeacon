@@ -8,7 +8,7 @@
 
 import UIKit
 
-func postCall(route: String, parameters: [String: Any], completion: @escaping (_ result: String) -> Void) {
+func postCall(route: String, parameters: [String: Any], completion: @escaping (_ result: Any) -> Void) {
     let url = NSURL(string: "\(serverUrl)/api/device/\(deviceIdString)/\(route)")! as URL
     let jsonData = try? JSONSerialization.data(withJSONObject: parameters)
 
@@ -19,18 +19,23 @@ func postCall(route: String, parameters: [String: Any], completion: @escaping (_
 
     let task = URLSession.shared.dataTask(with: request){data, response, error in
         guard error == nil && data != nil else {
-            completion("Error")
+            print("Error")
             return
         }
         if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200{
             completion("\(httpStatus.statusCode): \(String(describing: response))")
         }
-        completion(String(data: data!, encoding: String.Encoding.utf8)!)
+        do {
+           let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as! [String:AnyObject]
+           completion(json)
+        } catch {
+           print("Error")
+        }
     }
     task.resume()
 }
 
-func getCall(route: String, completion: @escaping (_ result: String) -> Void) {
+func getCall(route: String, completion: @escaping (_ result: Any) -> Void) {
 
     let request = NSMutableURLRequest(url: NSURL(string: "\(serverUrl)/api/device/\(deviceIdString)/\(route)")! as URL, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
     request.httpMethod = "GET"
@@ -41,13 +46,13 @@ func getCall(route: String, completion: @escaping (_ result: String) -> Void) {
         if error == nil && data != nil {
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as! [String:AnyObject]
-                completion("\(json)")
+                completion(json)
             } catch {
-               completion("Error")
+               print("Error")
             }
         }
         else if error != nil {
-            completion("Error accessing api: \(String(describing: error))")
+            print("Error accessing api: \(String(describing: error))")
         }
     }).resume()
 }
