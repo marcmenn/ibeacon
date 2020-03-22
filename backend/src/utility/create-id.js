@@ -1,5 +1,3 @@
-import { v4 as createId } from 'uuid'
+import uuid from 'uuid'
 
-export {
-  createId,
-}
+export const createId = uuid.v4
