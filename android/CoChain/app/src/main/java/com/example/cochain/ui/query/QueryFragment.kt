@@ -33,11 +33,13 @@ class QueryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_query, container, false)
+        val contactViewContainer = root.findViewById<LinearLayout>(R.id.contactViewContainer)
+        contactViewContainer.removeAllViews()
+
         val queryViewModel =
             ViewModelProviders.of(this).get(QueryViewModel::class.java)
 
         queryViewModel.beacons.observe(viewLifecycleOwner, Observer {
-            val contactViewContainer = root.findViewById<LinearLayout>(R.id.contactViewContainer)
             it.values.forEachIndexed { i, data ->
                 var contactView =
                     contactViewContainer.getChildAt(i) as ContactView?
@@ -74,7 +76,7 @@ class QueryFragment : Fragment() {
         val statusTextView = root.findViewById<TextView>(R.id.textViewStatus)
         statusTextView.text = "Status:\nFit"
 
-        for (i in 1..20) {
+        for (i in 1..0) {
             queryViewModel.addBeaconContactData(
                 BeaconContactData(
                     "device${i}",
