@@ -16,6 +16,7 @@ document: (event type specific)
 {
     type: 'register|contact|health-state' // event type
     deviceId: '' // mandatory string: device id
+    beaconId: '' // mandator string: beacon id
     timestamp: '' // mandatory ISO timestamp of event
     payload: {} // event type specific payload
 }
@@ -40,7 +41,6 @@ document: (event type specific)
     type: 'contact' // event type
     ... // standard event props
     payload: {
-        beaconId: '' // mandatory string: beacon id of own device
         contactedBeaconId: '' // mandatory string: contacted foreign beacon id
         distance: 17 // (optional) number: distance between devices (unit: meter)
     }
