@@ -21,13 +21,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Investigate the chain of contact of the corona virus in a hackathon</string>
+	<string>Investigate the chain of contact of the corona virus in a hackathon. Need to discover over Bloothoth</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Investigate the chain of contact of the corona virus in a hackathon</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Investigate the chain of contact of the corona virus in a hackathon</string>
+	<string>Investigate the chain of contact of the corona virus in a hackathon. To find other Devices.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Investigate the chain of contact of the corona virus in a hackathon</string>
+	<string>Investigate the chain of contact of the corona virus in a hackathon. To be serchable</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
