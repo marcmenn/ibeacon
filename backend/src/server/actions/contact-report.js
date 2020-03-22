@@ -1,3 +1,4 @@
+import { getContactsByBeacon } from '../../database/get-contacts.js'
 import { HEALTH_STATUS } from '../../api/health-status.js'
 
 const { HEALTHY, SICK } = HEALTH_STATUS
@@ -16,12 +17,36 @@ const CONTACTS_DUMMY_DATA = [
 ]
 
 export default async (req, res) => {
-  // const { deviceId } = req.params
-  const filterData = req.query
-  const { healthStatus } = filterData
+  const { beaconId } = req.context || {}
+  const {
+    healthStatus,
+    showRealData = false, // TODO: remove feature flag
+  } = req.query
 
-  const contacts = CONTACTS_DUMMY_DATA
-    .filter((contact) => (!healthStatus || contact.healthStatus === healthStatus))
+  let contacts = []
+
+  if (showRealData) {
+    const detailedContacts = beaconId ? await getContactsByBeacon(beaconId) : []
+
+    contacts = detailedContacts.map(({ healthInfo, contactInfo }) => {
+      const { distanceCount, distanceSum, minDistance, maxDistance } = contactInfo
+      const distanceAverage = distanceCount > 0 ? distanceSum / distanceCount : minDistance
+
+      return {
+        timestamp: contactInfo.maxTimestamp,
+        healthStatus: healthInfo.lastHealthState,
+        distance: distanceAverage,
+        minDistance,
+        maxDistance,
+        firstContact: contactInfo.minTimestamp,
+        healthTimestamp: healthInfo.lastTimestamp,
+      }
+    })
+  } else {
+    contacts = CONTACTS_DUMMY_DATA
+  }
+
+  contacts = contacts.filter((contact) => (!healthStatus || contact.healthStatus === healthStatus))
 
   res.send({
     contacts,
