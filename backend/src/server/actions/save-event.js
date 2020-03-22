@@ -1,4 +1,3 @@
-import HttpStatus from 'http-status-codes'
 import event from './event.js'
 import { json, jsonOnly } from './json.js'
 import withBeaconIdFromDatabase from './with-beacon-id-from-database.js'

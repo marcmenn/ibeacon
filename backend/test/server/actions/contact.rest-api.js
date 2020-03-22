@@ -7,6 +7,7 @@ import { EVENT_TYPE } from '../../../src/api/event-type.js'
 import { getTestHost } from '../../test-api/setup.rest-api.js'
 
 import { register } from './register.rest-api.js'
+
 const { expect } = chai
 
 const deviceId = 'deviceIdA'
