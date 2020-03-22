@@ -3,6 +3,7 @@ package com.example.cochain
 import android.Manifest
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -13,9 +14,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.cochain.ui.TimedBeaconSimulator
+import com.example.cochain.ui.beacon.BeaconService
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.BeaconParser
+import org.altbeacon.beacon.Identifier
 import org.altbeacon.beacon.Region
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver
 import org.altbeacon.beacon.startup.BootstrapNotifier
@@ -49,10 +52,6 @@ class MainActivity : AppCompatActivity(), BootstrapNotifier {
         verifyPermission()
 
         enableMonitoring()
-
-        // simply constructing this class and holding a reference to it in your custom Application
-        // class will automatically cause the BeaconLibrary to save battery whenever the application
-        // is not visible.  This reduces bluetooth power usage by about 60%
 
         // simply constructing this class and holding a reference to it in your custom Application
         // class will automatically cause the BeaconLibrary to save battery whenever the application
@@ -206,8 +205,7 @@ class MainActivity : AppCompatActivity(), BootstrapNotifier {
 
     fun enableMonitoring() {
         Log.i(TAG, "enabling beacon scanning")
-        val region = Region("backgroundRegion", null, null, null)
-        regionBootstrap = RegionBootstrap(this, region)
+        regionBootstrap = RegionBootstrap(this, BeaconService.SCANNING_REGION)
     }
 
     override fun didDetermineStateForRegion(state: Int, region: Region?) {
@@ -216,9 +214,11 @@ class MainActivity : AppCompatActivity(), BootstrapNotifier {
 
     override fun didEnterRegion(region: Region?) {
         Log.i(TAG, "beacon enter region")
+        startService(Intent(this, BeaconService::class.java))
     }
 
     override fun didExitRegion(region: Region?) {
         Log.i(TAG, "beacon exit")
+        stopService(Intent(this, BeaconService::class.java))
     }
 }
