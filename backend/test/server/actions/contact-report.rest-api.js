@@ -5,14 +5,21 @@ import chai from 'chai'
 import { HEALTH_STATUS } from '../../../src/api/health-status.js'
 
 import { getTestHost } from '../../test-api/setup.rest-api.js'
+import { register } from './register.rest-api.js'
 
 const { expect } = chai
 const { HEALTHY, SICK } = HEALTH_STATUS
+const deviceId = 'deviceIdA'
+const beaconId = 'beaconIdB'
 
 describe('GET /api/device/:deviceId/contact (contact report)', () => {
+  before(async () => {
+    register(deviceId, beaconId, '2020-03-21T09:48:01.510Z')
+  })
+
   it('should return all contacts', async () => {
     const { body } = await request(getTestHost())
-      .get('/api/device/deviceIdA/contact')
+      .get(`/api/device/${deviceId}/contact`)
       .expect(HttpStatus.OK)
 
     expect(body).to.deep.equal({
@@ -33,7 +40,7 @@ describe('GET /api/device/:deviceId/contact (contact report)', () => {
 
   it('should return only sick contacts', async () => {
     const { body } = await request(getTestHost())
-      .get(`/api/device/deviceIdA/contact?healthStatus=${SICK}`)
+      .get(`/api/device/${deviceId}/contact?healthStatus=${SICK}`)
       .expect(HttpStatus.OK)
 
     expect(body).to.deep.equal({

@@ -2,9 +2,7 @@ import { collection } from '../../src/database/couchbase.js'
 
 let ids = []
 
-export const collectId = (result = {}) => {
-  const { id } = result
-
+export const collectId = (id) => {
   if (!ids.includes(id)) {
     ids.push(id)
   }
