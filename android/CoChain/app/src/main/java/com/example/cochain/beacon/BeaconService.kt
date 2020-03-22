@@ -1,13 +1,13 @@
-package com.example.cochain.ui.beacon
+package com.example.cochain.beacon
 
-import android.app.IntentService
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
-import android.os.Build
 import android.os.IBinder
 import android.util.Log
-import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProviders
+import com.example.cochain.ui.query.QueryFragment
+import com.example.cochain.ui.query.QueryViewModel
 import org.altbeacon.beacon.*
 
 class BeaconServiceBinder(service: BeaconService) : Binder() {
@@ -19,16 +19,25 @@ class BeaconService : Service(), BeaconConsumer {
 
     companion object {
         private const val TAG = "BeaconService"
+
         // TODO: do we need to hard code these for CoChain, sync with iOS app?
         const val MAJOR_IDENTIFIER = 1234;
         const val MINOR_IDENTIFIER = 4711;
-        val SCANNING_REGION = Region("CoChainScanningRegion", null, Identifier.fromInt(BeaconService.MAJOR_IDENTIFIER), Identifier.fromInt(BeaconService.MINOR_IDENTIFIER))
+        val SCANNING_REGION = Region(
+            "CoChainScanningRegion",
+            null,
+            Identifier.fromInt(MAJOR_IDENTIFIER),
+            Identifier.fromInt(MINOR_IDENTIFIER)
+        )
         // for testing only: all beacons
         //val SCANNING_REGION = Region("CoChainScanningRegion", null, null, null)
     }
 
     private val rangeNotifer = RangeNotifier { beacons: MutableCollection<Beacon>, region: Region ->
-        Log.i(TAG, "RangeNotifier update, number of beacons in region: ${beacons.size}, region: ${region}")
+        Log.i(
+            TAG,
+            "RangeNotifier update, number of beacons in region: ${beacons.size}, region: ${region}"
+        )
         if (beacons.size > 0) {
             beacons.forEach { beacon: Beacon ->
                 Log.d(TAG, "RangeNotifier beacon detected: ${beacon}")
