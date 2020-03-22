@@ -1,8 +1,9 @@
 import { collection } from '../../database/couchbase.js'
 import { createId } from '../../utility/create-id.js'
 import { timeNow } from '../../utility/time-now.js'
+import wrapAsync from '../middleware/wrap-async.js'
 
-export default (type) => async (req, res) => {
+export default (type) => wrapAsync(async (req, res) => {
   const { deviceId } = req.params
   const payload = req.body
 
@@ -17,4 +18,4 @@ export default (type) => async (req, res) => {
     timestamp,
     payload,
   })
-}
+})
