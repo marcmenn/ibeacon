@@ -1,6 +1,6 @@
 import { collection } from '../../database/couchbase.js'
 import { timeNow } from '../../utility/time-now.js'
-import wrapAsync from '../middleware/wrap-async.js'
+import wrapAsync from './wrap-async.js'
 
 export default (type) => wrapAsync(async (req, res) => {
   const { deviceId } = req.params

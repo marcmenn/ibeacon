@@ -1,5 +1,5 @@
 import { getVersion } from '../../get-version.js'
-import wrapAsync from '../middleware/wrap-async.js'
+import wrapAsync from './wrap-async.js'
 
 export default wrapAsync(async (req, res) => {
   res.send({

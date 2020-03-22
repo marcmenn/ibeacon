@@ -1,6 +1,6 @@
 import { getContactsByBeacon } from '../../database/get-contacts.js'
 import { HEALTH_STATUS } from '../../api/health-status.js'
-import wrapAsync from '../middleware/wrap-async.js'
+import wrapAsync from './wrap-async.js'
 
 const { HEALTHY, SICK } = HEALTH_STATUS
 

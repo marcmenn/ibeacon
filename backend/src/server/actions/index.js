@@ -1,7 +1,7 @@
 import addRequestId from 'express-request-id'
 import { EVENT_TYPE } from '../../api/event-type.js'
-import { json, jsonOnly } from '../middleware/json.js'
-import withDeviceId from '../middleware/with-device-id.js'
+import { json, jsonOnly } from './json.js'
+import withDeviceId from './with-device-id.js'
 import contactReport from './contact-report.js'
 
 import event from './event.js'
