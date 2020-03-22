@@ -1,11 +1,11 @@
 import fs from 'fs'
 import { bucket, close } from './couchbase.js'
 
-const VIEW_DESIGN_DOC = 'views'
+import { VIEWS_DESIGN_DOC } from './views.js'
 
 const run = async () => {
   const ddoc = JSON.parse(fs.readFileSync('./views/build/views.json'))
-  ddoc.name = VIEW_DESIGN_DOC
+  ddoc.name = VIEWS_DESIGN_DOC
   await bucket().viewIndexes().upsertDesignDocument(ddoc)
 }
 
