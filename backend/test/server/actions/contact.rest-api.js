@@ -16,6 +16,7 @@ describe('POST /api/device/:deviceId/contact (contact event)', () => {
         beaconId: 'beaconIdB',
         contactedBeaconId: 'beaconIdC',
         timestamp: '2020-03-21T11:48:01.510Z',
+        distance: 1.1,
       })
       .expect(HttpStatus.OK)
 
@@ -26,6 +27,7 @@ describe('POST /api/device/:deviceId/contact (contact event)', () => {
         timestamp: '2020-03-21T11:48:01.510Z',
         beaconId: 'beaconIdB',
         contactedBeaconId: 'beaconIdC',
+        distance: 1.1,
       },
     })
   })
