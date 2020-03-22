@@ -14,6 +14,8 @@ struct ContentView: View {
     @State var persons = [Person(name: "nobody met", infected: false, date: Date(), distance: 0, duration: 0)]
     @State var me = Me(infected: false)
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var showingAlert = false
+    @State private var alertText = ""
 
     var body: some View {
        VStack {
@@ -37,6 +39,9 @@ struct ContentView: View {
     .onReceive(timer) { _ in
         self.checkBeacons()
         }
+    .alert(isPresented: $showingAlert) {
+        Alert(title: Text("Server Response"), message: Text(self.alertText), dismissButton: .default(Text("Got it!")))
+    }
     }
 
     func checkBeacons() {
@@ -46,27 +51,32 @@ struct ContentView: View {
         if (beaconList.count > 0) {
             persons = []
             for index in 0...beaconList.count - 1 {
-                print(beaconList[index])
+//                print(beaconList[index])
                 persons.append(Person(name: "\(beaconList[index].major)_\(beaconList[index].minor)", infected: false, date: Date(), distance: Float(beaconList[index].accuracy), duration: 0))
             }
         }
     }
 
+    func showAlert(text: String) {
+        self.alertText = text
+        self.showingAlert = true
+    }
+
     func register() {
-        postCall(route: "", parameters: ["beaconId": beaconIdString,"timestamp": "\(Date())"])
+        postCall(route: "", parameters: ["beaconId": beaconIdString,"timestamp": "\(Date())"], completion: showAlert)
     }
 
     func reportContact() {
-        postCall(route: "contact", parameters: ["beaconId": beaconIdString,"contactedBeaconId": UUID().uuidString,"timestamp": "\(Date())"])
+        postCall(route: "contact", parameters: ["beaconId": beaconIdString,"contactedBeaconId": UUID().uuidString,"timestamp": "\(Date())"], completion: showAlert)
     }
 
     func healthState() {
         me.infected = !me.infected
-        postCall(route: "health-state", parameters: ["healthState": me.infected ? "sick" : "healthy","timestamp": "\(Date())"])
+        postCall(route: "health-state", parameters: ["healthState": me.infected ? "sick" : "healthy","timestamp": "\(Date())"], completion: showAlert)
     }
 
     func getContacts() {
-        getCall(route: "contact")
+        getCall(route: "contact", completion: showAlert)
     }
 }
 

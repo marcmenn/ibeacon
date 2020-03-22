@@ -8,7 +8,7 @@
 
 import UIKit
 
-func postCall(route: String, parameters: [String: Any]) {
+func postCall(route: String, parameters: [String: Any], completion: @escaping (_ result: String) -> Void) {
     let url = NSURL(string: "\(serverUrl)/api/device/\(deviceIdString)/\(route)")! as URL
     let jsonData = try? JSONSerialization.data(withJSONObject: parameters)
 
@@ -19,20 +19,19 @@ func postCall(route: String, parameters: [String: Any]) {
 
     let task = URLSession.shared.dataTask(with: request){data, response, error in
         guard error == nil && data != nil else {
-            print("error")
+            completion("Error")
             return
         }
         if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200{
-            print("statusCode: \(httpStatus.statusCode)")
-            print("response = \(String(describing: response))")
+            completion("\(httpStatus.statusCode): \(String(describing: response))")
         }
-        let responseString = String(data: data!, encoding: String.Encoding.utf8)
-        print("responseString = \(String(describing: responseString))")
+        completion(String(data: data!, encoding: String.Encoding.utf8)!)
     }
     task.resume()
 }
 
-func getCall(route: String) {
+func getCall(route: String, completion: @escaping (_ result: String) -> Void) {
+
     let request = NSMutableURLRequest(url: NSURL(string: "\(serverUrl)/api/device/\(deviceIdString)/\(route)")! as URL, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
     request.httpMethod = "GET"
     request.allHTTPHeaderFields = ["cache-control": "no-cache"]
@@ -42,13 +41,13 @@ func getCall(route: String) {
         if error == nil && data != nil {
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as! [String:AnyObject]
-                print(json)
+                completion("\(json)")
             } catch {
-               print("Error")
+               completion("Error")
             }
         }
         else if error != nil {
-            print("Error accessing api: \(String(describing: error))")
+            completion("Error accessing api: \(String(describing: error))")
         }
     }).resume()
 }
