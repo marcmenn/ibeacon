@@ -1,3 +1,4 @@
+import addRequestId from 'express-request-id'
 import { EVENT_TYPE } from '../../api/event-type.js'
 import { json, jsonOnly } from '../middleware/json.js'
 import withDeviceId from '../middleware/with-device-id.js'
@@ -7,6 +8,7 @@ import event from './event.js'
 import hello from './hello.js'
 
 const defineActions = (app) => {
+  app.use(addRequestId())
   app.get('/', json, hello)
   app.get('/api', json, hello)
   app.post('/api/device/:deviceId', withDeviceId, json, jsonOnly, event(EVENT_TYPE.REGISTER))

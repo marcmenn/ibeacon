@@ -1,13 +1,12 @@
 import { collection } from '../../database/couchbase.js'
-import { createId } from '../../utility/create-id.js'
 import { timeNow } from '../../utility/time-now.js'
 import wrapAsync from '../middleware/wrap-async.js'
 
 export default (type) => wrapAsync(async (req, res) => {
   const { deviceId } = req.params
   const payload = req.body
+  const { id } = req
 
-  const id = createId()
   const timestamp = timeNow()
   const event = { type, deviceId, payload }
   await collection().insert(id, event)

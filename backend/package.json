@@ -23,6 +23,7 @@
     "chai": "^4.2.0",
     "couchbase": "^3.0.1",
     "express": "^4.17.1",
+    "express-request-id": "^1.4.1",
     "http-status-codes": "^1.4.0",
     "immutable": "^4.0.0-rc.12",
     "mocha": "^7.1.1",
