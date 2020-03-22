@@ -114,5 +114,5 @@ build: views
 views: views/build/views.json
 views/build/views.json: views/views.js
 	cd views; mkdir -p build; node . > build/views.json
-	node backend/src/database/upsert-views.js
-	CB_BUCKETNAME=test node backend/src/database/upsert-views.js
+	cat views/build/views.json | node backend/src/database/upsert-views.js
+	cat views/build/views.json | CB_BUCKETNAME=test node backend/src/database/upsert-views.js
