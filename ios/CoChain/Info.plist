@@ -22,8 +22,12 @@
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Investigate the chain of contact of the corona virus in a hackathon. Need to discover over Bloothoth</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Investigate the chain of contact of the corona virus in a hackathon. Need to contact over Bloothoth</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Investigate the chain of contact of the corona virus in a hackathon. To find other Devices.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Investigate the chain of contact of the corona virus in a hackathon. To be found by other Devices.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Investigate the chain of contact of the corona virus in a hackathon. To be serchable</string>
 	<key>UIApplicationSceneManifest</key>
