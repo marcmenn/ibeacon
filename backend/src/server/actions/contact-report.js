@@ -34,7 +34,7 @@ const contactReport = wrapAsync(async (req, res) => {
   if (showRealData) {
     const detailedContacts = beaconId ? await getContactsByBeacon(beaconId) : []
 
-    contacts = detailedContacts.map(({ healthInfo, contactInfo }) => {
+    contacts = detailedContacts.map(({ healthInfo = {}, contactInfo = {} }) => {
       const { distanceCount, distanceSum, minDistance, maxDistance } = contactInfo
       const distanceAverage = distanceCount > 0 ? distanceSum / distanceCount : minDistance
 
