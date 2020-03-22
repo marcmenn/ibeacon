@@ -18,6 +18,7 @@ dc_build:
 
 .PHONY: start
 start:
+	docker-compose build
 	docker-compose up -d
 
 CLEAN_VIEWS:=rm -rf views/build
