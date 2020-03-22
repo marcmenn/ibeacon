@@ -39,7 +39,7 @@ export default [
   withDeviceId,
   json,
   jsonOnly,
-  withBeaconIdFromDatabase,
+  withBeaconIdFromDatabase(false),
   checkBeaconId,
   reqId,
   event(EVENT_TYPE.REGISTER),

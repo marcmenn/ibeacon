@@ -1,6 +1,7 @@
 import { getContactsByBeacon } from '../../database/get-contacts.js'
 import { HEALTH_STATUS } from '../../api/health-status.js'
 import { json } from './json.js'
+import withBeaconIdFromDatabase from './with-beacon-id-from-database.js'
 import withDeviceId from './with-device-id.js'
 import wrapAsync from './wrap-async.js'
 
@@ -19,8 +20,8 @@ const CONTACTS_DUMMY_DATA = [
   { timestamp: '2020-03-18T08:48:01.510Z', healthStatus: SICK, distance: 9.1, duration: 76 },
 ]
 
-export default [withDeviceId, json, wrapAsync(async (req, res) => {
-  const { beaconId } = req.context || {}
+const contactReport = wrapAsync(async (req, res) => {
+  const { beaconId } = req.context
   const {
     healthStatus,
     showRealData = false, // TODO: remove feature flag
@@ -54,4 +55,11 @@ export default [withDeviceId, json, wrapAsync(async (req, res) => {
   res.send({
     contacts,
   })
-})]
+})
+
+export default [
+  withDeviceId,
+  json,
+  withBeaconIdFromDatabase(),
+  contactReport,
+]
