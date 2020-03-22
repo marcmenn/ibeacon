@@ -2,6 +2,7 @@ import addRequestId from 'express-request-id'
 import { EVENT_TYPE } from '../../api/event-type.js'
 import { json, jsonOnly } from './json.js'
 import withDeviceId from './with-device-id.js'
+import withContext from './with-context.js'
 import contactReport from './contact-report.js'
 
 import event from './event.js'
@@ -9,10 +10,7 @@ import hello from './hello.js'
 
 const defineActions = (app) => {
   app.use(addRequestId())
-  app.use((req, res, next) => {
-    if (!req.context) req.context = {}
-    next()
-  })
+  app.use(withContext)
   app.get('/', json, hello)
   app.get('/api', json, hello)
   app.post('/api/device/:deviceId', withDeviceId, json, jsonOnly, event(EVENT_TYPE.REGISTER))
