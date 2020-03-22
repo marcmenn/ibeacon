@@ -9,6 +9,8 @@
 import UIKit
 
 func postCall(route: String, parameters: [String: Any], completion: @escaping (_ result: Any) -> Void) {
+
+    print(parameters)
     let url = NSURL(string: "\(serverUrl)/api/device/\(deviceIdString)/\(route)")! as URL
     let jsonData = try? JSONSerialization.data(withJSONObject: parameters)
 
@@ -65,10 +67,10 @@ func formatedDate(date: Date) -> String {
 }
 
 func formatedUTC(date: Date) -> String {
-    let format = DateFormatter()
-    format.timeZone = .current
-    format.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-    return format.string(from: date)
+    let iso8601DateFormatter = ISO8601DateFormatter()
+    iso8601DateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+    let utc = iso8601DateFormatter.string(from: date)
+    return utc
 }
 
 

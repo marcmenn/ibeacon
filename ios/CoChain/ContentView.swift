@@ -21,7 +21,6 @@ struct ContentView: View {
        VStack {
         Image(systemName: "person.circle.fill").font(Font.system(size: 60)).foregroundColor(me.infected ? Color.red : Color.white)
         Text("\(me.infected ? "krank" : "fit")").bold().font(.largeTitle).padding(12).background(me.infected ? Color.red: Color.black).foregroundColor(Color.white).cornerRadius(12.0)
-        Button(action:{self.reportContact()}, label:{Text("report contact")}).padding(20)
         Button(action:{self.healthState()}, label:{Text(me.infected ? "I feel healthy" : "I feel sick!")}).padding(20)
         Button(action:{self.getContacts()}, label:{Text("get contacts")}).padding(20)
         if(persons.count > 0) {
@@ -50,19 +49,20 @@ struct ContentView: View {
         if (beaconList.count > 0) {
             persons = []
             for index in 0...beaconList.count - 1 {
-//                print(beaconList[index])
-                persons.append(Person(name: "\(beaconList[index].major)_\(beaconList[index].minor)", infected: false, date: Date(), distance: Float(beaconList[index].accuracy), duration: 0))
+                let beacon = beaconList[index]
+                persons.append(Person(name: "\(beacon.major)_\(beacon.minor)", infected: false, date: Date(), distance: Float(beacon.accuracy), duration: 0))
+                postCall(route: "contact", parameters: ["beaconId": beaconIdString,"contactedBeaconId": beacon.uuid,"timestamp": "\(formatedUTC(date: Date()))","distance": Float(beacon.accuracy)], completion: showResult)
             }
         }
+    }
+
+    func showResult(result: Any) {
+        print(result)
     }
 
     func showAlert(text: Any) {
         self.alertText = "\(text)"
         self.showingAlert = true
-    }
-
-    func reportContact() {
-        postCall(route: "contact", parameters: ["beaconId": beaconIdString,"contactedBeaconId": UUID().uuidString,"timestamp": "\(formatedUTC(date: Date()))","distance": Double.random(min: 0.10, max: 5.00)], completion: showAlert)
     }
 
     func healthState() {
