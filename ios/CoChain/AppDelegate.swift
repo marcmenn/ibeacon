@@ -18,6 +18,7 @@ public struct BeaconEvent {
     var duration: Int
 }
 
+public var serverUrl = "https://cochain.formatquadrat.de"
 public var deviceIdString = ""
 public var beaconIdString = ""
 public var beaconRange = ""

@@ -65,7 +65,7 @@ struct ContentView: View {
     }
 
     func register() {
-        let url = NSURL(string: "http://192.168.178.72/api/device/\(deviceIdString)")! as URL
+        let url = NSURL(string: "\(serverUrl)/api/device/\(deviceIdString)")! as URL
         let json: [String: Any] = ["beaconId": beaconIdString,
                                    "timestamp": "\(Date())"]
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
@@ -91,7 +91,7 @@ struct ContentView: View {
     }
 
     func metOne() {
-        let url = NSURL(string: "http://192.168.178.72/api/device/\(deviceIdString)/contact")! as URL
+        let url = NSURL(string: "\(serverUrl)/api/device/\(deviceIdString)/contact")! as URL
         let json: [String: Any] = ["beaconId": beaconIdString,
                                    "contactedBeaconId": UUID().uuidString,
                                    "timestamp": "\(Date())"]
@@ -119,7 +119,7 @@ struct ContentView: View {
 
     func setState() {
         me.infected = !me.infected
-        let url = NSURL(string: "http://192.168.178.72/api/device/\(deviceIdString)/health-state")! as URL
+        let url = NSURL(string: "\(serverUrl)/api/device/\(deviceIdString)/health-state")! as URL
         let json: [String: Any] = ["healthState": me.infected ? "sick" : "healthy",
                                    "timestamp": "\(Date())"]
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
@@ -145,7 +145,7 @@ struct ContentView: View {
     }
 
     func getState() {
-        let request = NSMutableURLRequest(url: NSURL(string: "http://192.168.178.72/api/device/\(deviceIdString)/contact")! as URL, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
+        let request = NSMutableURLRequest(url: NSURL(string: "\(serverUrl)/api/device/\(deviceIdString)/contact")! as URL, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = ["cache-control": "no-cache"]
 
