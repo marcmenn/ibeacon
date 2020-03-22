@@ -1,3 +1,25 @@
+import { collection } from '../../src/database/couchbase.js'
+
+let ids = []
+
+export const collectId = (result = {}) => {
+  const { id } = result
+
+  if (!ids.includes(id)) {
+    ids.push(id)
+  }
+}
+
+export const deleteCollectedIds = async (idsToDelete = ids) => {
+  const col = collection()
+
+  await Promise.all(idsToDelete.map(async (id) => col.remove(id)))
+
+  if (idsToDelete === ids) {
+    ids = []
+  }
+}
+
 export const ensureView = async (viewQueryFn, options = {}) => {
   const {
     maxTry = 10,
