@@ -1,5 +1,6 @@
 import addRequestId from 'express-request-id'
 import { EVENT_TYPE } from '../../api/event-type.js'
+import report from './report.js'
 import contactReport from './contact-report.js'
 import hello from './hello.js'
 import register from './register.js'
@@ -15,6 +16,7 @@ const defineActions = (app) => {
   app.get('/api/device/:deviceId/contact', contactReport)
   app.post('/api/device/:deviceId/contact', saveEvent(EVENT_TYPE.CONTACT))
   app.post('/api/device/:deviceId/health-state', saveEvent(EVENT_TYPE.HEALTH_STATE))
+  app.get('/api/device/:deviceId', report)
 }
 
 export {
