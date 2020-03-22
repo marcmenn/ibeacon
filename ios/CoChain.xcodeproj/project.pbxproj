@@ -13,6 +13,8 @@
 		9B11DB062424D4370072A844 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B11DB052424D4370072A844 /* Assets.xcassets */; };
 		9B11DB092424D4370072A844 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B11DB082424D4370072A844 /* Preview Assets.xcassets */; };
 		9B11DB0C2424D4370072A844 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B11DB0A2424D4370072A844 /* LaunchScreen.storyboard */; };
+		9B9ECC5624274DA1001CF107 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B9ECC5524274DA1001CF107 /* Functions.swift */; };
+		9B9ECC5824274E6A001CF107 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B9ECC5724274E6A001CF107 /* Globals.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		9B11DB082424D4370072A844 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9B11DB0B2424D4370072A844 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B11DB0D2424D4370072A844 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9B9ECC5524274DA1001CF107 /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
+		9B9ECC5724274E6A001CF107 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				9B11DAFF2424D4340072A844 /* AppDelegate.swift */,
+				9B9ECC5724274E6A001CF107 /* Globals.swift */,
+				9B9ECC5524274DA1001CF107 /* Functions.swift */,
 				9B11DB012424D4340072A844 /* SceneDelegate.swift */,
 				9B11DB032424D4340072A844 /* ContentView.swift */,
 				9B11DB052424D4370072A844 /* Assets.xcassets */,
@@ -149,6 +155,8 @@
 				9B11DB002424D4340072A844 /* AppDelegate.swift in Sources */,
 				9B11DB022424D4340072A844 /* SceneDelegate.swift in Sources */,
 				9B11DB042424D4340072A844 /* ContentView.swift in Sources */,
+				9B9ECC5824274E6A001CF107 /* Globals.swift in Sources */,
+				9B9ECC5624274DA1001CF107 /* Functions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,7 +293,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"CoChain/Preview Content\"";
 				DEVELOPMENT_TEAM = E6T9V3934X;
 				ENABLE_PREVIEWS = YES;
@@ -294,7 +302,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.menzelapps.cochain;
 				PRODUCT_NAME = CoChain;
 				SWIFT_VERSION = 5.0;
@@ -307,7 +315,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"CoChain/Preview Content\"";
 				DEVELOPMENT_TEAM = E6T9V3934X;
 				ENABLE_PREVIEWS = YES;
@@ -316,7 +324,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.menzelapps.cochain;
 				PRODUCT_NAME = CoChain;
 				SWIFT_VERSION = 5.0;

@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     var peripheralManager: CBPeripheralManager?
-    var location: CLLocationManager?
+    var locationManager: CLLocationManager?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         let contentView = ContentView()
@@ -43,14 +43,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func createLocationManageer() -> Void {
-        self.location = CLLocationManager()
-        self.location!.delegate = self
-        self.location!.requestAlwaysAuthorization()
+        self.locationManager = CLLocationManager()
+        self.locationManager!.delegate = self
+        self.locationManager!.requestAlwaysAuthorization()
     }
 
     func refreshBeacons() -> Void {
         let beaconRegion: CLBeaconRegion = CLBeaconRegion(uuid: UUID(uuidString: beaconRange)!, identifier: beaconIdString)
-        self.location!.startMonitoring(for: beaconRegion)
+        self.locationManager!.startMonitoring(for: beaconRegion)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -84,7 +84,7 @@ extension SceneDelegate: CBPeripheralManagerDelegate {
         if state == .poweredOn {
             let serviceUUIDs: Array<CBUUID> = [CBUUID(nsuuid: myBeacon!.uuid)]
             var peripheralData: Dictionary<String, Any> = myBeacon!.peripheralData(withMeasuredPower: nil)  as NSDictionary as! Dictionary<String, Any>
-            peripheralData[CBAdvertisementDataLocalNameKey] = "Contact Chain"
+            peripheralData[CBAdvertisementDataLocalNameKey] = "CoChain"
             peripheralData[CBAdvertisementDataServiceUUIDsKey] = serviceUUIDs
             self.peripheralManager!.startAdvertising(peripheralData)
         }
@@ -106,13 +106,10 @@ extension SceneDelegate: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         if state == .inside {
             manager.startRangingBeacons(in: region as! CLBeaconRegion)
-            return
         }
-        manager.stopRangingBeacons(in: region as! CLBeaconRegion)
     }
 
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         beaconList = beacons
-        manager.stopRangingBeacons(in: region)
     }
 }
