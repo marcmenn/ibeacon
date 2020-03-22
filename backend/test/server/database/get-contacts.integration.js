@@ -1,13 +1,21 @@
 import chai from 'chai'
-
-import saveEvent from '../../../src/database/event.js'
-import { collectId, deleteCollectedIds, ensureView } from '../../test-api/database.js'
 import { EVENT_TYPE } from '../../../src/api/event-type.js'
-import { getContactsByBeacon } from '../../../src/database/get-contacts.js'
 import { HEALTH_STATUS } from '../../../src/api/health-status.js'
+import { collection } from '../../../src/database/couchbase.js'
+import { getContactsByBeacon } from '../../../src/database/get-contacts.js'
 import { queryContactByBeacon, queryHealthStateByBeacon } from '../../../src/database/views.js'
+import { createId } from '../../../src/utility/create-id.js'
+import { timeNow } from '../../../src/utility/time-now.js'
+import { collectId, deleteCollectedIds, ensureView } from '../../test-api/database.js'
 
 const { expect } = chai
+
+const saveEvent = async (type, deviceId, payload) => {
+  const id = createId()
+  const event = { type, deviceId, timestamp: timeNow(), payload }
+  await collection().insert(id, event)
+  return { id, ...event }
+}
 
 describe('get contacts', function test() {
   this.timeout(60000)
