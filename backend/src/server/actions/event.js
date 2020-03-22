@@ -2,19 +2,18 @@ import { collection } from '../../database/couchbase.js'
 import { timeNow } from '../../utility/time-now.js'
 import wrapAsync from './wrap-async.js'
 
-export default (type) => wrapAsync(async (req, res) => {
+export const prepareEvent = (req, type, timestamp = timeNow()) => {
   const { deviceId } = req.params
+  const { beaconId } = req.context
   const payload = req.body
-  const { id } = req
+  return { type, deviceId, beaconId, timestamp, payload }
+}
 
-  const timestamp = timeNow()
-  const event = { type, deviceId, payload }
+export default (type) => wrapAsync(async (req, res) => {
+  const event = prepareEvent(req, type)
+
+  const { id } = req
   await collection().insert(id, event)
 
-  res.send({
-    type,
-    deviceId,
-    timestamp,
-    payload,
-  })
+  res.send(event)
 })

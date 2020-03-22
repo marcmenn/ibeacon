@@ -1,9 +1,11 @@
 import HttpStatus from 'http-status-codes'
 import { EVENT_TYPE } from '../../api/event-type.js'
-import event from './event.js'
+import { collection } from '../../database/couchbase.js'
+import { prepareEvent } from './event.js'
 import { json, jsonOnly } from './json.js'
 import withBeaconIdFromDatabase from './with-beacon-id-from-database.js'
 import withDeviceId from './with-device-id.js'
+import wrapAsync from './wrap-async.js'
 
 const checkBeaconId = (req, res, next) => {
   const { beaconId } = req.body
@@ -16,7 +18,7 @@ const checkBeaconId = (req, res, next) => {
 
   // do not re-register
   if (req.context.beaconId === beaconId) {
-    req.sendStatus(HttpStatus.OK)
+    res.sendStatus(HttpStatus.OK)
     return
   }
 
@@ -29,11 +31,13 @@ const checkBeaconId = (req, res, next) => {
   next()
 }
 
-const reqId = (req, res, next) => {
+const register = wrapAsync(async (req, res) => {
+  const event = prepareEvent(req, EVENT_TYPE.REGISTER)
   const { deviceId } = req.params
-  req.id = `device-${deviceId}`
-  next()
-}
+  const id = `device-${deviceId}`
+  await collection().insert(id, event)
+  res.send(event)
+})
 
 export default [
   withDeviceId,
@@ -41,6 +45,5 @@ export default [
   jsonOnly,
   withBeaconIdFromDatabase(false),
   checkBeaconId,
-  reqId,
-  event(EVENT_TYPE.REGISTER),
+  register,
 ]
