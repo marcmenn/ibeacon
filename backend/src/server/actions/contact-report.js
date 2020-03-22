@@ -60,6 +60,6 @@ const contactReport = wrapAsync(async (req, res) => {
 export default [
   withDeviceId,
   json,
-  withBeaconIdFromDatabase(),
+  withBeaconIdFromDatabase(true),
   contactReport,
 ]
