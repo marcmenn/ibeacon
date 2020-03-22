@@ -26,6 +26,7 @@
     "express-request-id": "^1.4.1",
     "http-status-codes": "^1.4.0",
     "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.15",
     "mocha": "^7.1.1",
     "react": "^16.13.1",
     "typescript": "^3.8.3",

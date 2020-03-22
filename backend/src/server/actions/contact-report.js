@@ -1,3 +1,5 @@
+import orderBy from 'lodash/orderBy.js'
+
 import { getContactsByBeacon } from '../../database/get-contacts.js'
 import { HEALTH_STATUS } from '../../api/health-status.js'
 import { json } from './json.js'
@@ -51,6 +53,7 @@ const contactReport = wrapAsync(async (req, res) => {
   }
 
   contacts = contacts.filter((contact) => (!healthStatus || contact.healthStatus === healthStatus))
+  contacts = orderBy(contacts, 'timestamp', 'desc')
 
   res.send({
     contacts,
