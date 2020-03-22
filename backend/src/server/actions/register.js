@@ -13,4 +13,17 @@ const withBeaconIdFromPayload = (req, res, next) => {
   next()
 }
 
-export default [withDeviceId, json, jsonOnly, withBeaconIdFromPayload, event(EVENT_TYPE.REGISTER)]
+const reqId = (req, res, next) => {
+  const { deviceId } = req.params
+  req.id = `device-${deviceId}`
+  next()
+}
+
+export default [
+  withDeviceId,
+  json,
+  jsonOnly,
+  withBeaconIdFromPayload,
+  reqId,
+  event(EVENT_TYPE.REGISTER),
+]

@@ -6,27 +6,37 @@ import { EVENT_TYPE } from '../../../src/api/event-type.js'
 
 import { getTestHost } from '../../test-api/setup.rest-api.js'
 
+import { register } from './register.rest-api.js'
 const { expect } = chai
 
+const deviceId = 'deviceIdA'
+const beaconId = 'beaconIdB'
+const contactedBeaconId = 'beaconIdC'
+const timestamp = '2020-03-21T11:48:01.510Z'
+
 describe('POST /api/device/:deviceId/contact (contact event)', () => {
+  before(async () => {
+    register(deviceId, beaconId, timestamp)
+  })
+
   it('should return `received` message', async () => {
     const { body } = await request(getTestHost())
-      .post('/api/device/deviceIdA/contact')
+      .post(`/api/device/${deviceId}/contact`)
       .send({
-        beaconId: 'beaconIdB',
-        contactedBeaconId: 'beaconIdC',
-        timestamp: '2020-03-21T11:48:01.510Z',
+        beaconId,
+        contactedBeaconId,
+        timestamp,
         distance: 1.1,
       })
       .expect(HttpStatus.OK)
 
     expect(body).to.deep.include({
       type: EVENT_TYPE.CONTACT,
-      deviceId: 'deviceIdA',
+      deviceId,
       payload: {
-        timestamp: '2020-03-21T11:48:01.510Z',
-        beaconId: 'beaconIdB',
-        contactedBeaconId: 'beaconIdC',
+        timestamp,
+        beaconId,
+        contactedBeaconId,
         distance: 1.1,
       },
     })
