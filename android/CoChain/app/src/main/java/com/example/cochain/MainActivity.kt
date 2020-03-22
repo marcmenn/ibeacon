@@ -13,12 +13,11 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.cochain.beacon.BeaconService
 import com.example.cochain.ui.TimedBeaconSimulator
-import com.example.cochain.ui.beacon.BeaconService
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.BeaconParser
-import org.altbeacon.beacon.Identifier
 import org.altbeacon.beacon.Region
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver
 import org.altbeacon.beacon.startup.BootstrapNotifier
@@ -75,6 +74,7 @@ class MainActivity : AppCompatActivity(), BootstrapNotifier {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
     }
 
     private fun verifyBluetooth() {

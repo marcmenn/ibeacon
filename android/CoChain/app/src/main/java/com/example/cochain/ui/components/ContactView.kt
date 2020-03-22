@@ -7,25 +7,25 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.cochain.R
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class ContactView : ConstraintLayout {
 
-    private var _date : LocalDate? = null
-    private var _distance : Int? = null
-    private var _duration : Int? = null
+    private var _dateTime : LocalDateTime? = null
+    private var _distance : Float? = null
+    private var _duration : Float? = null
 
-    var date: LocalDate?
-        get() = _date
+    var dateTime: LocalDateTime?
+        get() = _dateTime
         @RequiresApi(Build.VERSION_CODES.O)
         set(value) {
-            _date = value
+            _dateTime = value
             val textViewDate = findViewById<TextView>(R.id.textViewDate)
-            textViewDate.text = "Date:\n ${_date?.format(DateTimeFormatter.ISO_LOCAL_DATE)}"
+            textViewDate.text = "Date:\n ${_dateTime?.format(DateTimeFormatter.ISO_LOCAL_DATE)}"
         }
 
-    var distance: Int?
+    var distance: Float?
         get() = _distance
         set(value) {
             _distance = value
@@ -33,7 +33,7 @@ class ContactView : ConstraintLayout {
             textViewDistance.text = "Duration:\n ${_distance}"
         }
 
-    var duration: Int?
+    var duration: Float?
         get() = _duration
         set(value) {
             _duration = value
@@ -41,24 +41,13 @@ class ContactView : ConstraintLayout {
             textViewDuration.text = "Duration:\n ${_duration}"
         }
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
         context,
         attrs,
         defStyle
-    ) {
-        init()
-    }
-
-    private fun init() {
-        inflate(context, R.layout.contact_view, this)
-    }
-
+    )
 }
