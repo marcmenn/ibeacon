@@ -84,10 +84,10 @@ export const contactReport = {
 
 export const contactByBeacon = {
   map(doc) {
-    const { type, payload, timestamp: _timestamp } = doc
+    const { type, beaconId, payload, timestamp: _timestamp } = doc
 
     if (type === 'contact') {
-      const { beaconId, contactedBeaconId, timestamp = _timestamp, distance } = payload
+      const { contactedBeaconId, timestamp = _timestamp, distance } = payload
       emit(beaconId, { direction: 'to', beaconId: contactedBeaconId, timestamp, distance })
       emit(contactedBeaconId, { direction: 'from', beaconId, timestamp, distance })
     }
