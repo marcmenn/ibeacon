@@ -81,13 +81,101 @@ export const contactReport = {
     }
   }
 }
+
 export const contactByBeacon = {
-  map(doc, meta) {
-    const { type, deviceId, payload, timestamp: _timestamp } = doc
+  map(doc) {
+    const { type, payload, timestamp: _timestamp } = doc
+
     if (type === 'contact') {
       const { beaconId, contactedBeaconId, timestamp = _timestamp, distance } = payload
-      emit(beaconId, { type: 'to', beaconId: contactedBeaconId, timestamp, deviceId, distance })
-      emit(contactedBeaconId, { type: 'from', beaconId, timestamp, deviceId, distance })
+      emit(beaconId, { direction: 'to', beaconId: contactedBeaconId, timestamp, distance })
+      emit(contactedBeaconId, { direction: 'from', beaconId, timestamp, distance })
     }
+  },
+  reduce(key, values) {
+    const result = {
+      count: 0,
+      infoByBeaconId: {}
+    }
+
+    const len = values.length
+
+    for (let idx = 0; idx < len; idx += 1) {
+      const { direction, beaconId, timestamp, distance } = values[idx]
+      result.count = result.count + 1
+
+      const info = result.infoByBeaconId[beaconId] || {
+        count: 0,
+        distanceCount: 0,
+        distanceSum: 0,
+        countByDirection: {}
+      }
+      result.infoByBeaconId[beaconId] = info
+      info.count = info.count + 1
+
+      if (direction) {
+        info.countByDirection[direction] = 1 + (info.countByDirection[direction] || 0)
+      }
+
+      if (timestamp) {
+        if (!info.minTimestamp || info.minTimestamp > timestamp) {
+          info.minTimestamp = timestamp
+        }
+
+        if (!info.maxTimestamp || info.maxTimestamp < timestamp) {
+          info.maxTimestamp = timestamp
+        }
+      }
+
+      if (distance != null) {
+        info.distanceCount = info.distanceCount + 1
+        info.distanceSum = info.distanceSum + distance
+
+        if (!info.minDistance || info.minDistance > distance) {
+          info.minDistance = distance
+        }
+
+        if (!info.maxDistance || info.maxDistance < distance) {
+          info.maxDistance = distance
+        }
+      }
+    }
+
+    return result
+  }
+}
+
+export const healthStateByBeacon = {
+  map(doc) {
+    const { type, beaconId, payload, timestamp: _timestamp } = doc
+
+    if (type === 'health-state') {
+      const { healthState, timestamp = _timestamp } = payload
+      emit(beaconId, { healthState, timestamp })
+    }
+  },
+  reduce(key, values) {
+    const result = { count: 0 }
+
+    const len = values.length
+
+    for (let idx = 0; idx < len; idx += 1) {
+      const { healthState, timestamp } = values[idx]
+      result.count = result.count + 1
+
+      if (healthState && timestamp) {
+        if (!result.firstTimestamp || result.firstTimestamp > timestamp) {
+          result.firstTimestamp = timestamp
+          result.firstHealthState = healthState
+        }
+
+        if (!result.lastTimestamp || result.lastTimestamp < timestamp) {
+          result.lastTimestamp = timestamp
+          result.lastHealthState = healthState
+        }
+      }
+    }
+
+    return result
   }
 }
