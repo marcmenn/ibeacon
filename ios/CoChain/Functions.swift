@@ -9,8 +9,7 @@
 import UIKit
 
 func postCall(route: String, parameters: [String: Any], completion: @escaping (_ result: Any) -> Void) {
-
-    print(parameters)
+//    print(parameters)
     let url = NSURL(string: "\(serverUrl)/api/device/\(deviceIdString)/\(route)")! as URL
     let jsonData = try? JSONSerialization.data(withJSONObject: parameters)
 

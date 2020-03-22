@@ -13,7 +13,7 @@ import CoreBluetooth
 struct ContentView: View {
     @State var persons = [Person(name: "nobody met", infected: false, date: Date(), distance: 0, duration: 0)]
     @State var me = Me(infected: false)
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
     @State private var showingAlert = false
     @State private var alertText = ""
 
@@ -51,7 +51,7 @@ struct ContentView: View {
             for index in 0...beaconList.count - 1 {
                 let beacon = beaconList[index]
                 persons.append(Person(name: "\(beacon.major)_\(beacon.minor)", infected: false, date: Date(), distance: Float(beacon.accuracy), duration: 0))
-                postCall(route: "contact", parameters: ["beaconId": beaconIdString,"contactedBeaconId": beacon.uuid,"timestamp": "\(formatedUTC(date: Date()))","distance": Float(beacon.accuracy)], completion: showResult)
+                postCall(route: "contact", parameters: ["beaconId": beaconIdString,"contactedBeaconId": beacon.uuid.uuidString,"timestamp": "\(formatedUTC(date: Date()))","distance": Float(beacon.accuracy)], completion: showResult)
             }
         }
     }

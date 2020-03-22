@@ -42,7 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func register() {
-        postCall(route: "", parameters: ["beaconId": beaconIdString,"timestamp": "\(Date())"], completion: showResult)
+        postCall(route: "", parameters: ["beaconId": beaconIdString,"timestamp": "\(formatedUTC(date: Date()))"], completion: showResult)
     }
 
     func createBeacon() -> Void {
