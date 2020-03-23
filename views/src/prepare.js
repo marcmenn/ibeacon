@@ -17,13 +17,13 @@ function replacer(key, value) {
   return value
 }
 
-export default async (config) => {
+export default async (basedir, config) => {
   const views = {}
 
   for (const [ viewName, functions ] of Object.entries(config)) {
     const view = {}
     for (const [ functionName, file ] of Object.entries(functions)) {
-      const input = path.resolve(file)
+      const input = path.resolve(basedir, file)
       const bundle = await rollup({
         input,
         plugins: [babel({
