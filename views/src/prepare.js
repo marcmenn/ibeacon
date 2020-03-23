@@ -18,37 +18,40 @@ function replacer(key, value) {
 }
 
 export default async (basedir, config) => {
-  const views = {}
+  const ddocs = {}
+  for (const [ ddocName, ddocConfig ] of Object.entries(config)) {
+    const views = {}
+    for (const [ viewName, functions ] of Object.entries(ddocConfig)) {
+      const view = {}
+      for (const [ functionName, file ] of Object.entries(functions)) {
+        const input = path.resolve(basedir, file)
+        const bundle = await rollup({
+          input,
+          plugins: [babel({
+              presets: ['@babel/env'],
+            }
+          )]
+        })
 
-  for (const [ viewName, functions ] of Object.entries(config)) {
-    const view = {}
-    for (const [ functionName, file ] of Object.entries(functions)) {
-      const input = path.resolve(basedir, file)
-      const bundle = await rollup({
-        input,
-        plugins: [babel({
-            presets: ['@babel/env'],
+        const { output } = await bundle.generate({
+          format: 'es'
+        })
+
+        for (const item of output) {
+          const { type, code, name } = item
+          if (type !== 'chunk') {
+            throw new Error(`Unsupported rollup output type: ${type}`)
           }
-        )]
-      })
 
-      const { output } = await bundle.generate({
-        format: 'es'
-      })
-
-      for (const item of output) {
-        const { type, code, name } = item
-        if (type !== 'chunk') {
-          throw new Error(`Unsupported rollup output type: ${type}`)
-        }
-
-        const r = new RegExp(`^var\\s+${name}\\s*=\\s*\\(function\\s*\\((.*?)\\)`, 'm').exec(code)
-        const param = r[1]
-        view[functionName] = `function (${param}) {
+          const r = new RegExp(`^var\\s+${name}\\s*=\\s*\\(function\\s*\\((.*?)\\)`, 'm').exec(code)
+          const param = r[1]
+          view[functionName] = `function (${param}) {
 ${(code.replace(`export default ${name};`, `return ${name}(${param});`))}}`
+        }
       }
+      views[viewName] = view
     }
-    views[viewName] = view
+    ddocs[ddocName] = views
   }
-  return { views }
+  return ddocs
 }
