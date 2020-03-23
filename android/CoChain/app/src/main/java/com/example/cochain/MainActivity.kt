@@ -2,7 +2,6 @@ package com.example.cochain
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -51,7 +50,8 @@ class MainActivity : AppCompatActivity(), BootstrapNotifier {
         verifyBluetooth()
         verifyPermission()
 
-        enableMonitoring()
+        Log.i(TAG, "enabling beacon scanning for region ${BeaconService.SCANNING_REGION}")
+        regionBootstrap = RegionBootstrap(this, BeaconService.SCANNING_REGION)
 
         // simply constructing this class and holding a reference to it in your custom Application
         // class will automatically cause the BeaconLibrary to save battery whenever the application
@@ -85,10 +85,6 @@ class MainActivity : AppCompatActivity(), BootstrapNotifier {
                 builder.setTitle("Bluetooth not enabled")
                 builder.setMessage("Please enable bluetooth in settings and restart this application.")
                 builder.setPositiveButton(android.R.string.ok, null)
-                builder.setOnDismissListener(DialogInterface.OnDismissListener {
-                    //finish();
-                    //System.exit(0);
-                })
                 builder.show()
             }
         } catch (e: RuntimeException) {
@@ -96,10 +92,6 @@ class MainActivity : AppCompatActivity(), BootstrapNotifier {
             builder.setTitle("Bluetooth LE not available")
             builder.setMessage("Sorry, this device does not support Bluetooth LE.")
             builder.setPositiveButton(android.R.string.ok, null)
-            builder.setOnDismissListener(DialogInterface.OnDismissListener {
-                //finish();
-                //System.exit(0);
-            })
             builder.show()
         }
     }
@@ -196,17 +188,6 @@ class MainActivity : AppCompatActivity(), BootstrapNotifier {
                 return
             }
         }
-    }
-
-    fun disableMonitoring() {
-        Log.i(TAG, "disabling beacon scanning")
-        regionBootstrap?.disable()
-        regionBootstrap = null
-    }
-
-    fun enableMonitoring() {
-        Log.i(TAG, "enabling beacon scanning for region ${BeaconService.SCANNING_REGION}")
-        regionBootstrap = RegionBootstrap(this, BeaconService.SCANNING_REGION)
     }
 
     override fun didDetermineStateForRegion(state: Int, region: Region?) {
