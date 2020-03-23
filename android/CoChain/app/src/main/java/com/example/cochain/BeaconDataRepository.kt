@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 
 class BeaconDataRepository(context: Context) {
     companion object {
-        private const val TAG = "BeaconDataRepository"
+        private val TAG = this::class.java.declaringClass!!.name
     }
     private val beaconContactDao: BeaconContactDao
 
