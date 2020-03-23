@@ -18,6 +18,7 @@ import com.example.cochain.ui.TimedBeaconSimulator
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.BeaconParser
+import org.altbeacon.beacon.MonitorNotifier
 import org.altbeacon.beacon.Region
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver
 import org.altbeacon.beacon.startup.BootstrapNotifier
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity(), BootstrapNotifier {
     private var backgroundPowerSaver: BackgroundPowerSaver? = null
 
     companion object {
-        private const val TAG = "MainActivity"
+        private val TAG = this::class.java.declaringClass!!.name
         private const val PERMISSION_REQUEST_FINE_LOCATION = 1
         private const val PERMISSION_REQUEST_BACKGROUND_LOCATION = 2
     }
@@ -204,21 +205,24 @@ class MainActivity : AppCompatActivity(), BootstrapNotifier {
     }
 
     fun enableMonitoring() {
-        Log.i(TAG, "enabling beacon scanning")
+        Log.i(TAG, "enabling beacon scanning for region ${BeaconService.SCANNING_REGION}")
         regionBootstrap = RegionBootstrap(this, BeaconService.SCANNING_REGION)
     }
 
     override fun didDetermineStateForRegion(state: Int, region: Region?) {
-        Log.i(TAG, "Current region state is: ${if (state == 1) "INSIDE" else "OUTSIDE (${state})"}")
+        Log.i(TAG, "Current region state is: ${if (state == MonitorNotifier.INSIDE) "INSIDE" else "OUTSIDE"}")
+        if (state == MonitorNotifier.INSIDE) {
+            startService(Intent(this, BeaconService::class.java))
+        } else {
+            stopService(Intent(this, BeaconService::class.java))
+        }
     }
 
     override fun didEnterRegion(region: Region?) {
-        Log.i(TAG, "beacon enter region")
-        startService(Intent(this, BeaconService::class.java))
+        Log.i(TAG, "beacon entered region")
     }
 
     override fun didExitRegion(region: Region?) {
         Log.i(TAG, "beacon exit")
-        stopService(Intent(this, BeaconService::class.java))
     }
 }
