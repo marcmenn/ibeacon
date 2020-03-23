@@ -1,3 +1,4 @@
+import presetEnv from '@babel/preset-env'
 import path from 'path'
 import { rollup } from 'rollup'
 import babel from 'rollup-plugin-babel'
@@ -6,7 +7,7 @@ const compileFunction = async (input) => {
   const bundle = await rollup({
     input,
     plugins: [babel({
-        presets: ['@babel/env'],
+        presets: [presetEnv],
       }
     )]
   })
