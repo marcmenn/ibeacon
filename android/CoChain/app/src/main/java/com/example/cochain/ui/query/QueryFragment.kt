@@ -15,16 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cochain.BeaconDataRepository
 import com.example.cochain.R
-import com.example.cochain.beacon.BeaconContact
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 
 class QueryFragment : Fragment() {
-
-    companion object {
-        private const val TAG = "QueryFragment"
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -50,19 +43,6 @@ class QueryFragment : Fragment() {
 
         val repository = BeaconDataRepository(requireContext())
         lifecycleScope.launch { repository.deleteAll() }
-        for (i in 1..40) {
-            lifecycleScope.launch {
-                repository.upsert(
-                    BeaconContact(
-                        "beacon${i}",
-                        Instant.now().minus(i.toLong(), ChronoUnit.DAYS).toEpochMilli(),
-                        (i * 2).toFloat(),
-                        i.toFloat(),
-                        true
-                    )
-                )
-            }
-        }
 
         return root
     }
