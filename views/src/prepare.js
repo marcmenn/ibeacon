@@ -1,6 +1,7 @@
-import _eval from 'eval'
-import path from 'path'
 import babelCore from '@babel/core'
+import path from 'path'
+import { rollup } from 'rollup'
+import babel from 'rollup-plugin-babel'
 
 const { transformFileSync } = babelCore
 
@@ -16,14 +17,38 @@ function replacer(key, value) {
   return value
 }
 
-export default function (src) {
-  const babelResult = transformFileSync(path.resolve(src), babelOptions)
-  // Evaluate as if required
-  const evalled = _eval(babelResult.code, src)
-  // extract default export
-  const views = evalled.__esModule && evalled.default && Object.keys(evalled).length === 1
-    ? evalled.default
-    : evalled
+export default async (config) => {
+  const views = {}
 
-  return { views: JSON.parse(JSON.stringify(views, replacer)) }
+  for (const [ viewName, functions ] of Object.entries(config)) {
+    const view = {}
+    for (const [ functionName, file ] of Object.entries(functions)) {
+      const input = path.resolve(file)
+      const bundle = await rollup({
+        input,
+        plugins: [babel({
+            presets: ['@babel/env'],
+          }
+        )]
+      })
+
+      const { output } = await bundle.generate({
+        format: 'es'
+      })
+
+      for (const item of output) {
+        const { type, code, name } = item
+        if (type !== 'chunk') {
+          throw new Error(`Unsupported rollup output type: ${type}`)
+        }
+
+        const r = new RegExp(`^var\\s+${name}\\s*=\\s*\\(function\\s*\\((.*?)\\)`, 'm').exec(code)
+        const param = r[1]
+        view[functionName] = `function (${param}) {
+${(code.replace(`export default ${name};`, `return ${name}(${param});`))}}`
+      }
+    }
+    views[viewName] = view
+  }
+  return { views }
 }
