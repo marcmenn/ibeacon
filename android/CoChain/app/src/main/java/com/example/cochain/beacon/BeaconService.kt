@@ -3,22 +3,30 @@ package com.example.cochain.beacon
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
-import androidx.lifecycle.ViewModelProviders
-import com.example.cochain.ui.query.QueryFragment
-import com.example.cochain.ui.query.QueryViewModel
+import androidx.annotation.RequiresApi
+import com.example.cochain.BeaconDataRepository
+import kotlinx.coroutines.*
 import org.altbeacon.beacon.*
+import java.time.Instant
+import kotlin.coroutines.CoroutineContext
 
 class BeaconServiceBinder(service: BeaconService) : Binder() {
     var service: BeaconService = service
         get() = field
 }
 
-class BeaconService : Service(), BeaconConsumer {
+class BeaconService : Service(), BeaconConsumer, CoroutineScope {
+
+    private lateinit var beaconDataRepository : BeaconDataRepository
+    private var coroutineJob: Job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.IO + coroutineJob
 
     companion object {
-        private const val TAG = "BeaconService"
+        private val TAG = this::class.java.declaringClass!!.name
 
         // TODO: do we need to hard code these for CoChain, sync with iOS app?
         const val MAJOR_IDENTIFIER = 1234;
@@ -33,15 +41,27 @@ class BeaconService : Service(), BeaconConsumer {
         //val SCANNING_REGION = Region("CoChainScanningRegion", null, null, null)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private val rangeNotifer = RangeNotifier { beacons: MutableCollection<Beacon>, region: Region ->
         Log.i(
             TAG,
             "RangeNotifier update, number of beacons in region: ${beacons.size}, region: ${region}"
         )
         if (beacons.size > 0) {
-            beacons.forEach { beacon: Beacon ->
+            val beaconContacts = beacons.map { beacon: Beacon ->
                 Log.d(TAG, "RangeNotifier beacon detected: ${beacon}")
+                BeaconContact(
+                    beacon.id1.toString(),
+                    Instant.now().toEpochMilli(),
+                    beacon.distance,
+                    0.0,
+                    true
+                )
             }
+            launch(coroutineJob) {
+                beaconDataRepository.upsert(*beaconContacts.toTypedArray())
+            }
+
         }
     }
 
@@ -53,6 +73,12 @@ class BeaconService : Service(), BeaconConsumer {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.i(TAG, "starting service")
+        if (!this::beaconDataRepository.isInitialized) {
+            beaconDataRepository = BeaconDataRepository(this)
+        }
+        launch(coroutineJob) {
+            beaconDataRepository.deleteAll()
+        }
         if (null != intent) {
             beaconManager = BeaconManager.getInstanceForApplication(this)
             beaconManager.bind(this)
@@ -66,6 +92,7 @@ class BeaconService : Service(), BeaconConsumer {
         super.onDestroy()
         beaconManager.removeRangeNotifier(rangeNotifer)
         beaconManager.unbind(this)
+        coroutineJob.cancel()
     }
 
     override fun onBeaconServiceConnect() {
