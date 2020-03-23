@@ -13,8 +13,8 @@ import java.time.format.DateTimeFormatter
 class ContactView : ConstraintLayout {
 
     private var _dateTime : LocalDateTime? = null
-    private var _distance : Float? = null
-    private var _duration : Float? = null
+    private var _distance : Double? = null
+    private var _duration : Double? = null
 
     var dateTime: LocalDateTime?
         get() = _dateTime
@@ -25,20 +25,20 @@ class ContactView : ConstraintLayout {
             textViewDate.text = "Date:\n ${_dateTime?.format(DateTimeFormatter.ISO_LOCAL_DATE)}"
         }
 
-    var distance: Float?
+    var distance: Double?
         get() = _distance
         set(value) {
             _distance = value
             val textViewDistance = findViewById<TextView>(R.id.textViewDistance)
-            textViewDistance.text = "Duration:\n ${_distance}"
+            textViewDistance.text = "Distance:\n %.2f".format(distance)
         }
 
-    var duration: Float?
+    var duration: Double?
         get() = _duration
         set(value) {
             _duration = value
             val textViewDuration = findViewById<TextView>(R.id.textViewDuration)
-            textViewDuration.text = "Duration:\n ${_duration}"
+            textViewDuration.text = "Duration:\n %.2f".format(duration)
         }
 
     constructor(context: Context) : super(context)

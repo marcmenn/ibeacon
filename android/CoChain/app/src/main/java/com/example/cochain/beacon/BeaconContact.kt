@@ -8,8 +8,8 @@ import java.time.LocalDateTime
 data class BeaconContact(
     @PrimaryKey val beaconId: String,
     var lastSeen: Long,
-    var minimumDistance: Float,
-    var duration: Float,
+    var minimumDistance: Double,
+    var duration: Double,
     var fit: Boolean
 ) {
     override fun toString(): String {
