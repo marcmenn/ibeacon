@@ -117,4 +117,4 @@ views: views/build/views.json
 	cat views/build/views.json | CB_BUCKETNAME=test node backend/src/database/upsert-views.js
 .PHONY: views/build/views.json
 views/build/views.json:
-	cd views; mkdir -p build; node . couchbase.views.json > build/views.json
+	cd views; mkdir -p build; node . ../backend/couchbase.views.json > build/views.json

@@ -1,0 +1,18 @@
+{
+  "contactReport": {
+    "map": "src/database/views/contact-report/map.js",
+    "reduce": "src/database/views/contact-report/reduce.js"
+  },
+  "healthReport": {
+    "map": "src/database/views/health-report/map.js",
+    "reduce": "src/database/views/health-report/reduce.js"
+  },
+  "contactByBeacon": {
+    "map": "src/database/views/contact-by-beacon/map.js",
+    "reduce": "src/database/views/contact-by-beacon/reduce.js"
+  },
+  "healthStateByBeacon": {
+    "map": "src/database/views/health-state-by-beacon/map.js",
+    "reduce": "src/database/views/health-state-by-beacon/reduce.js"
+  }
+}
