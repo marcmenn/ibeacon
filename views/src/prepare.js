@@ -1,57 +1,62 @@
-import babelCore from '@babel/core'
 import path from 'path'
 import { rollup } from 'rollup'
 import babel from 'rollup-plugin-babel'
 
-const { transformFileSync } = babelCore
+const compileFunction = async (input) => {
+  const bundle = await rollup({
+    input,
+    plugins: [babel({
+        presets: ['@babel/env'],
+      }
+    )]
+  })
 
-const babelOptions = {
-  presets: ['@babel/env'],
-}
+  const { output } = await bundle.generate({ format: 'es' })
 
-// Transform to json with sourcecode of functions
-function replacer(key, value) {
-  if (typeof (value) === 'function') {
-    return value.toString()
+  let fn = null
+  for (const item of output) {
+    const { type, code, name } = item
+    if (type !== 'chunk') {
+      throw new Error(`Unsupported rollup output type: ${type}`)
+    }
+
+    const r = new RegExp(`^var\\s+${name}\\s*=\\s*\\(function\\s*\\((.*?)\\)`, 'm').exec(code)
+    const param = r[1]
+    if (fn != null) {
+      throw new Error('Already found a chunk')
+    }
+    fn  = `function (${param}) {
+${(code.replace(`export default ${name};`, `return ${name}(${param});`))}}`
   }
-  return value
+  if (fn == null) {
+    throw new Error('No chunks found')
+  }
+  return fn
 }
 
 export default async (basedir, config) => {
+  const jobs = []
+
   const ddocs = {}
   for (const [ ddocName, ddocConfig ] of Object.entries(config)) {
-    const views = {}
+    ddocs[ddocName] = {}
     for (const [ viewName, functions ] of Object.entries(ddocConfig)) {
-      const view = {}
+      ddocs[ddocName][viewName] = {}
       for (const [ functionName, file ] of Object.entries(functions)) {
-        const input = path.resolve(basedir, file)
-        const bundle = await rollup({
-          input,
-          plugins: [babel({
-              presets: ['@babel/env'],
-            }
-          )]
-        })
-
-        const { output } = await bundle.generate({
-          format: 'es'
-        })
-
-        for (const item of output) {
-          const { type, code, name } = item
-          if (type !== 'chunk') {
-            throw new Error(`Unsupported rollup output type: ${type}`)
-          }
-
-          const r = new RegExp(`^var\\s+${name}\\s*=\\s*\\(function\\s*\\((.*?)\\)`, 'm').exec(code)
-          const param = r[1]
-          view[functionName] = `function (${param}) {
-${(code.replace(`export default ${name};`, `return ${name}(${param});`))}}`
-        }
+        const fileName = path.resolve(basedir, file)
+        jobs.push({ddocName, viewName, functionName, fileName})
       }
-      views[viewName] = view
     }
-    ddocs[ddocName] = views
   }
-  return ddocs
+
+  const result = await Promise.all(jobs.map(async ({ddocName, viewName, functionName, fileName}) => {
+    const source = await compileFunction(fileName)
+    return {ddocName, viewName, functionName, fileName, source}
+  }))
+
+  const reducer = (accumulator, {ddocName, viewName, functionName, source}) => {
+    accumulator[ddocName][viewName][functionName] = source
+    return accumulator
+  }
+  return result.reduce(reducer, ddocs)
 }
