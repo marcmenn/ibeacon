@@ -1,4 +1,5 @@
 import findIndex from '../util/find-index.js'
+import reduceProperties from '../util/reduce-properties.js'
 
 export default (key, values, rereduce) => {
   const doc2reduce = ({ beaconId, ms, healthState }) => {
@@ -21,14 +22,7 @@ export default (key, values, rereduce) => {
     return result
   }
 
-  const reduceContacts = (result, value) => {
-    for (const contact in value) {
-      if (Object.prototype.hasOwnProperty.call(value, contact)) {
-        result[contact] = value[contact].reduce(reduceHealthState, result[contact] || [])
-      }
-    }
-    return result
-  }
+  const reduceContacts = reduceProperties(reduceHealthState)
 
   if (rereduce) {
     return values.reduce(reduceContacts)

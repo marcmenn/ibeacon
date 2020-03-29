@@ -1,4 +1,5 @@
 import findIndex from '../util/find-index.js'
+import reduceProperties from '../util/reduce-properties.js'
 
 export default (key, values, rereduce) => {
   const INTERVAL = 10 * 60000 // amount of minutes for grouping events
@@ -35,14 +36,7 @@ export default (key, values, rereduce) => {
     return result
   }
 
-  const reduceContacts = (result, value) => {
-    for (const contact in value) {
-      if (Object.prototype.hasOwnProperty.call(value, contact)) {
-        result[contact] = value[contact].reduce(reduceIntervals, result[contact] || [])
-      }
-    }
-    return result
-  }
+  const reduceContacts = reduceProperties(reduceIntervals)
 
   if (rereduce) {
     return values.reduce(reduceContacts)
