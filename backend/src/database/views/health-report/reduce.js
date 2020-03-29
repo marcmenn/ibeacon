@@ -1,7 +1,7 @@
 import findIndex from '../util/find-index.js'
 import reduceProperties from '../util/reduce-properties.js'
 
-const doc2reduce = ({ beaconId, ms, healthState }) => {
+const doc2reduce = (beaconId) => ({ ms, healthState }) => {
   const result = {}
   result[beaconId] = [{
     ms,
@@ -15,7 +15,6 @@ const reduceHealthState = (result, value) => {
   if (i < 0) {
     result.push(value)
   } else {
-    const interval = result[i]
     result.splice(i, 0, value)
   }
   return result
@@ -25,5 +24,5 @@ const reduceContacts = reduceProperties(reduceHealthState)
 
 export default (key, values, rereduce) => (rereduce
   ? values.reduce(reduceContacts)
-  : values.map(doc2reduce).reduce(reduceContacts)
+  : values.map(doc2reduce(key[0])).reduce(reduceContacts)
 )

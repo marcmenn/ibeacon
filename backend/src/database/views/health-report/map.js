@@ -1,5 +1,7 @@
 import parseTimestamp from '../util/parse-timestamp.js'
 
+const key = (beaconId, date) => [beaconId, date.getUTCFullYear(), date.getUTCMonth()]
+
 export default (doc) => {
   const { type, payload, timestamp: serverTimestamp, beaconId: serverBeaconId } = doc
   if (type === 'health-state') {
@@ -9,11 +11,7 @@ export default (doc) => {
     const beaconId = serverBeaconId || clientBeaconId
 
     if (beaconId) {
-      emit([beaconId, start.getUTCFullYear(), start.getUTCMonth()], {
-        beaconId,
-        ms,
-        healthState,
-      })
+      emit(key(beaconId, start), { ms, healthState })
     }
   }
 }
