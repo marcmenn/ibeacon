@@ -1,3 +1,5 @@
+import findIndex from '../util/find-index.js'
+
 export default (key, values, rereduce) => {
   const INTERVAL = 10 * 60000 // amount of minutes for grouping events
   const doc2reduce = ({ contact, ms, distance }) => {
@@ -11,13 +13,6 @@ export default (key, values, rereduce) => {
       sumDistance: distance,
     }]
     return result
-  }
-
-  const findIndex = (array, predicate) => {
-    for (let i = 0; i < array.length; i += 1) {
-      if (predicate(array[i])) return i;
-    }
-    return -1
   }
 
   const reduceIntervals = (result, value) => {

@@ -1,3 +1,5 @@
+import findIndex from '../util/find-index.js'
+
 export default (key, values, rereduce) => {
   const doc2reduce = ({ beaconId, ms, healthState }) => {
     const result = {}
@@ -6,13 +8,6 @@ export default (key, values, rereduce) => {
       healthState,
     }]
     return result
-  }
-
-  const findIndex = (array, predicate) => {
-    for (let i = 0; i < array.length; i += 1) {
-      if (predicate(array[i])) return i;
-    }
-    return -1
   }
 
   const reduceHealthState = (result, value) => {
