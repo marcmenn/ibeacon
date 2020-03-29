@@ -1,8 +1,7 @@
+/* eslint-disable no-param-reassign */
 export default (reducer) => (result, value) => {
-  for (const contact in value) {
-    if (Object.prototype.hasOwnProperty.call(value, contact)) {
-      result[contact] = value[contact].reduce(reducer, result[contact] || [])
-    }
+  for (const contact of Object.keys(value)) {
+    result[contact] = value[contact].reduce(reducer, result[contact] || [])
   }
   return result
 }

@@ -5,7 +5,7 @@ export default (key, values) => {
 
   for (let idx = 0; idx < len; idx += 1) {
     const { healthState, timestamp } = values[idx]
-    result.count = result.count + 1
+    result.count += 1
 
     if (healthState && timestamp) {
       if (!result.firstTimestamp || result.firstTimestamp > timestamp) {
