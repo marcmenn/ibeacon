@@ -1,19 +1,63 @@
-export const emitted = []
-let byKey = {}
+import chai from 'chai'
 
-const strKey = (key) => key.join('-')
+import binarySearch from '../../../src/utility/binary-search.js'
 
-export const emittedValueByKey = (key) => byKey[strKey(key)]
+const { expect } = chai
 
-export const createGlobalEmit = () => {
-  global.emit = (key, value) => {
-    emitted.push({ key, value })
-    byKey[strKey(key)] = value
+export default class View {
+  constructor(map, reduce) {
+    this.implMap = map
+    this.implReduce = reduce
+    this.clear()
   }
-  emitted.length = 0
-  byKey = {}
-}
 
-export const deleteGlobalEmit = () => {
-  delete global.emit
+  clear() {
+    this.emitted = []
+    this.sorted = true
+  }
+
+  map(doc) {
+    try {
+      global.emit = (key, value) => {
+        expect(key).to.be.an('array')
+        this.rows(key, true).push(value)
+      }
+      this.implMap(doc)
+    } finally {
+      delete global.emit
+    }
+  }
+
+  rows(key, create = false) {
+    const compare = (a, { key: b }) => {
+      const n = Math.min(a.length, b.length)
+      for (let i = 0; i < n; i += 1) {
+        if (a[i] < b[i]) return -1
+        if (a[i] > b[i]) return 1
+      }
+      if (a.length < b.length) return -1
+      if (a.length > b.length) return 1
+      return 0
+    }
+
+    const index = binarySearch(this.emitted, key, compare)
+    if (index >= 0) {
+      return this.emitted[index].values
+    }
+    if (create) {
+      const values = []
+      this.emitted.splice(1 - index, 0, { key, values })
+      return values
+    }
+    return []
+  }
+
+  get(key) {
+    return this.rows(key)[0]
+  }
+
+  reduce(key) {
+    const rows = this.rows(key)
+    return this.implReduce(key, rows, false)
+  }
 }

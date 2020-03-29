@@ -2,7 +2,7 @@ import chai from 'chai'
 
 import map from '../../../src/database/views/contact-report/map.js'
 import reduce from '../../../src/database/views/contact-report/reduce.js'
-import { createGlobalEmit, deleteGlobalEmit, emitted, emittedValueByKey } from './views.js'
+import View from './views.js'
 
 const { expect } = chai
 
@@ -11,11 +11,11 @@ describe('view.contact-report', () => {
   const clientTimestamp = '2121-12-12T12:12:12.000Z'
   const ms = new Date(clientTimestamp).getTime()
   const distance = 5
+  const view = new View(map, reduce)
+
+  afterEach(() => view.clear())
 
   describe('map', () => {
-    beforeEach(createGlobalEmit)
-    afterEach(deleteGlobalEmit)
-
     describe('happy path', () => {
       const type = 'contact'
       const serverTimestamp = '2020-02-02T02:02:02.000Z'
@@ -26,23 +26,23 @@ describe('view.contact-report', () => {
       const contactedBeaconKey = [contactedBeaconId, 2121, 11, 12]
 
       it('should emit two events', () => {
-        map(doc)
-        expect(emitted).to.have.lengthOf(2)
+        view.map(doc)
+        expect(view.emitted).to.have.lengthOf(2)
       })
 
       it('should emit key beaconId,yyyy,mm,dd', () => {
-        map(doc)
-        expect(emitted.map(({ key }) => key)).to.be.an('array').that.deep.includes(beaconKey)
+        view.map(doc)
+        expect(view.emitted.map(({ key }) => key)).to.be.an('array').that.deep.includes(beaconKey)
       })
 
       it('should emit key contactedBeaconId,yyyy,mm,dd', () => {
-        map(doc)
-        expect(emitted.map(({ key }) => key)).to.be.an('array').that.deep.includes(contactedBeaconKey)
+        view.map(doc)
+        expect(view.emitted.map(({ key }) => key)).to.be.an('array').that.deep.includes(contactedBeaconKey)
       })
 
       it('should emit value for beaconId', () => {
-        map(doc)
-        expect(emittedValueByKey(beaconKey)).to.be.an('object').that.deep.equals({
+        view.map(doc)
+        expect(view.get(beaconKey)).to.be.an('object').that.deep.equals({
           contact: contactedBeaconId,
           distance,
           ms,
@@ -50,8 +50,8 @@ describe('view.contact-report', () => {
       })
 
       it('should emit value for contactedBeaconId', () => {
-        map(doc)
-        expect(emittedValueByKey(contactedBeaconKey)).to.be.an('object').that.deep.equals({
+        view.map(doc)
+        expect(view.get(contactedBeaconKey)).to.be.an('object').that.deep.equals({
           contact: beaconId,
           distance,
           ms,
