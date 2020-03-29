@@ -9,6 +9,13 @@ const parseTimestamp = (...args) => {
   return 0
 }
 
+const key = (beaconId, date) => [
+  beaconId,
+  date.getUTCFullYear(),
+  date.getUTCMonth(),
+  date.getUTCDate(),
+]
+
 export default (doc) => {
   const { type, payload, timestamp: serverTimestamp } = doc
   if (type === 'contact') {
@@ -16,14 +23,7 @@ export default (doc) => {
     const ms = parseTimestamp(clientTimestamp, serverTimestamp)
     const start = new Date(ms)
 
-    const emitEvents = (id, contact) => {
-      emit([id, start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()], {
-        contact,
-        ms,
-        distance,
-      })
-    }
-    emitEvents(beaconId, contactedBeaconId)
-    emitEvents(contactedBeaconId, beaconId)
+    emit(key(beaconId, start), { contact: contactedBeaconId, ms, distance })
+    emit(key(contactedBeaconId, start), { contact: beaconId, ms, distance })
   }
 }
