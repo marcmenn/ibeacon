@@ -2,6 +2,7 @@ import chai from 'chai'
 
 import map from '../../../src/database/views/contact-report/map.js'
 import reduce from '../../../src/database/views/contact-report/reduce.js'
+import { createGlobalEmit, deleteGlobalEmit, emitted, emittedValueByKey } from './views.js'
 
 const { expect } = chai
 
@@ -12,25 +13,8 @@ describe('view.contact-report', () => {
   const distance = 5
 
   describe('map', () => {
-    const emitted = []
-    let byKey = {}
-
-    const strKey = (key) => key.join('-')
-
-    const emittedValueByKey = (key) => byKey[strKey(key)]
-
-    beforeEach(() => {
-      global.emit = (key, value) => {
-        emitted.push({ key, value })
-        byKey[strKey(key)] = value
-      }
-      emitted.length = 0
-      byKey = {}
-    })
-
-    afterEach(() => {
-      delete global.emit
-    })
+    beforeEach(createGlobalEmit)
+    afterEach(deleteGlobalEmit)
 
     describe('happy path', () => {
       const type = 'contact'
