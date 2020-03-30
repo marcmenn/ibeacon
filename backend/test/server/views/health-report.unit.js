@@ -3,7 +3,7 @@ import { HEALTH_STATUS } from '../../../src/api/health-status.js'
 
 import map from '../../../src/database/views/health-report/map.js'
 import reduce from '../../../src/database/views/health-report/reduce.js'
-import View from './views.js'
+import View from '../../test-api/views.js'
 
 const { expect } = chai
 

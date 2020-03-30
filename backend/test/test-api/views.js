@@ -1,6 +1,6 @@
 import chai from 'chai'
 
-import binarySearch from '../../../src/utility/binary-search.js'
+import binarySearch from '../../src/utility/binary-search.js'
 
 const { expect } = chai
 

@@ -2,7 +2,7 @@ import chai from 'chai'
 
 import map, { key } from '../../../src/database/views/contact-report/map.js'
 import reduce from '../../../src/database/views/contact-report/reduce.js'
-import View from './views.js'
+import View from '../../test-api/views.js'
 
 const { expect } = chai
 
