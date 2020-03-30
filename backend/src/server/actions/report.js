@@ -1,5 +1,6 @@
 import { HEALTH_STATUS } from '../../api/health-status.js'
 import { bucket } from '../../database/couchbase.js'
+import { key } from '../../database/views/contact-report/map.js'
 import withBeaconIdFromDatabase from './with-beacon-id-from-database.js'
 import withDeviceId from './with-device-id.js'
 import wrapAsync from './wrap-async.js'
@@ -14,38 +15,6 @@ const LOOKBACK_TIME = 14 * 24 * 60 * 60 * 1000
 const ACCIDENTAL_SICK = 60 * 60 * 1000
 
 const { HEALTHY, SICK } = HEALTH_STATUS
-
-const getContactReport = async (beaconId) => {
-  const endDate = new Date()
-  const startDate = new Date(endDate.getTime() - INCUBATION_TIME)
-  const end = [
-    beaconId,
-    endDate.getUTCFullYear(),
-    endDate.getUTCMonth(),
-    endDate.getUTCDate(),
-  ]
-  const start = [
-    beaconId,
-    startDate.getUTCFullYear(),
-    startDate.getUTCMonth(),
-    startDate.getUTCDate(),
-  ]
-
-  const { rows } = await bucket().viewQuery('views', 'contactReport', {
-    stale: 'false',
-    reduce: true,
-    group: true,
-    range: {
-      start,
-      end,
-      inclusive_end: true,
-    },
-  })
-
-  if (!rows.length) return {}
-  const [contactReport] = rows
-  return contactReport
-}
 
 const getHealthReportKeys = (contactReport) => {
   const keys = []
@@ -94,16 +63,7 @@ const reduceInfectious = ({ start, infectiousIntervals }, { ms, healthState }) =
   return { infectiousIntervals }
 }
 
-const getHealthReport = async (contactReport) => {
-  const keys = getHealthReportKeys(contactReport)
-  const { rows } = await bucket().viewQuery('views', 'healthReport', {
-    stale: 'false',
-    reduce: true,
-    group: true,
-    keys,
-  })
-  if (!rows.length) return []
-  const [healthReport] = rows
+const createResult = (contactReport, healthReport) => {
   const result = []
   for (const contact of Object.keys(contactReport)) {
     const healthStates = healthReport[contact]
@@ -136,15 +96,45 @@ const getHealthReport = async (contactReport) => {
   return result
 }
 
-const contactReport = wrapAsync(async (req, res) => {
+const viewQueryReport = async (viewName, options) => {
+  const { rows } = await bucket().viewQuery('views', 'healthReport', {
+    ...options,
+    stale: 'false',
+    reduce: true,
+    group: true,
+  })
+  if (!rows.length) return {}
+  const [result] = rows
+  return result
+}
+
+const contactReportOptions = (beaconId, endDate, startDate) => {
+  const end = key(beaconId, endDate)
+  const start = key(beaconId, startDate)
+
+  return {
+    range: {
+      start,
+      end,
+      inclusive_end: true,
+    },
+  }
+}
+
+const createReport = wrapAsync(async (req, res) => {
   const { beaconId } = req.context
-  const report = await getContactReport(beaconId)
-  const healthReport = await getHealthReport(report)
-  res.send(healthReport)
+  const endDate = new Date()
+  const startDate = new Date(endDate.getTime() - INCUBATION_TIME)
+  const options = contactReportOptions(beaconId, endDate, startDate)
+  const contactReport = await viewQueryReport('contactReport', options)
+  const keys = getHealthReportKeys(contactReport)
+  const healthReport = await viewQueryReport('healthReport', { keys })
+  const result = createResult(contactReport, healthReport)
+  res.send(result)
 })
 
 export default [
   withDeviceId,
   withBeaconIdFromDatabase(true),
-  contactReport,
+  createReport,
 ]
