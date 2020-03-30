@@ -1,6 +1,6 @@
 import parseTimestamp from '../util/parse-timestamp.js'
 
-const key = (beaconId, date) => [
+export const key = (beaconId, date) => [
   beaconId,
   date.getUTCFullYear(),
   date.getUTCMonth(),

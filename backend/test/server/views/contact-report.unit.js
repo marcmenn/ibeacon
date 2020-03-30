@@ -1,10 +1,24 @@
 import chai from 'chai'
 
-import map from '../../../src/database/views/contact-report/map.js'
+import map, { key } from '../../../src/database/views/contact-report/map.js'
 import reduce from '../../../src/database/views/contact-report/reduce.js'
 import View from './views.js'
 
 const { expect } = chai
+
+const ts = (date) => new Date(date).toISOString()
+
+const event = (
+  serverTimestamp,
+  beaconId,
+  contactedBeaconId,
+  distance = 10,
+  clientTimestamp = serverTimestamp,
+) => {
+  const type = 'contact'
+  const payload = { beaconId, contactedBeaconId, timestamp: ts(clientTimestamp), distance }
+  return { type, payload, timestamp: ts(serverTimestamp) }
+}
 
 describe('view.contact-report', () => {
   const beaconId = 'beaconId'
@@ -17,11 +31,9 @@ describe('view.contact-report', () => {
 
   describe('map', () => {
     describe('happy path', () => {
-      const type = 'contact'
       const serverTimestamp = '2020-02-02T02:02:02.000Z'
       const contactedBeaconId = 'contactedBeaconId'
-      const payload = { beaconId, contactedBeaconId, timestamp: clientTimestamp, distance }
-      const doc = { type, payload, timestamp: serverTimestamp }
+      const doc = event(serverTimestamp, beaconId, contactedBeaconId, distance, clientTimestamp)
       const beaconKey = [beaconId, 2121, 11, 12]
       const contactedBeaconKey = [contactedBeaconId, 2121, 11, 12]
 
@@ -120,6 +132,49 @@ describe('view.contact-report', () => {
           },
         ],
       })
+    })
+  })
+
+  describe('report', () => {
+    const date = new Date(clientTimestamp).getTime()
+    const timestamp = (hours = 0) => date + hours * 3600000
+    const t0 = timestamp()
+    const t1 = timestamp(1)
+    const t2 = timestamp(2)
+    const t3 = timestamp(3)
+
+    beforeEach(() => {
+      view.map(event(t0, 'a', 'b'))
+      view.map(event(t1, 'a', 'c'))
+      view.map(event(t2, 'b', 'e'))
+      view.map(event(t3, 'a', 'd'))
+    })
+
+    it('should contain all contacts', () => {
+      const report = view.reduce(key('a', new Date(t0)))
+      const common = {
+        n: 1,
+        minDistance: 10,
+        maxDistance: 10,
+        sumDistance: 10,
+      }
+      expect(report).to.be.an('object')
+      expect(report).to.have.a.property('b').that.is.an('array').and.deep.includes({
+        start: t0,
+        end: t0,
+        ...common,
+      })
+      expect(report).to.have.a.property('c').that.is.an('array').and.deep.includes({
+        start: t1,
+        end: t1,
+        ...common,
+      })
+      expect(report).to.have.a.property('d').that.is.an('array').and.deep.includes({
+        start: t3,
+        end: t3,
+        ...common,
+      })
+      expect(report).to.not.have.a.property('e')
     })
   })
 })
