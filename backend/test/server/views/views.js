@@ -56,4 +56,12 @@ export default class View {
     const rows = this.rows(key)
     return this.implReduce(key, rows, false)
   }
+
+  get size() {
+    let size = 0
+    for (const slot of this.emitted) {
+      size += slot.values.length
+    }
+    return size
+  }
 }

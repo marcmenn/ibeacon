@@ -27,17 +27,17 @@ describe('view.contact-report', () => {
 
       it('should emit two events', () => {
         view.map(doc)
-        expect(view.emitted).to.have.lengthOf(2)
+        expect(view.size).to.eq(2)
       })
 
       it('should emit key beaconId,yyyy,mm,dd', () => {
         view.map(doc)
-        expect(view.emitted.map(({ key }) => key)).to.be.an('array').that.deep.includes(beaconKey)
+        expect(view.rows(beaconKey)).to.be.an('array').that.has.lengthOf(1)
       })
 
       it('should emit key contactedBeaconId,yyyy,mm,dd', () => {
         view.map(doc)
-        expect(view.emitted.map(({ key }) => key)).to.be.an('array').that.deep.includes(contactedBeaconKey)
+        expect(view.rows(contactedBeaconKey)).to.be.an('array').that.has.lengthOf(1)
       })
 
       it('should emit value for beaconId', () => {

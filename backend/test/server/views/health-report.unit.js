@@ -26,12 +26,12 @@ describe('view.health-report', () => {
 
       it('should emit one event', () => {
         view.map(doc)
-        expect(view.emitted).to.have.lengthOf(1)
+        expect(view.size).to.eq(1)
       })
 
       it('should emit key beaconId,yyyy,mm', () => {
         view.map(doc)
-        expect(view.emitted.map(({ key }) => key)).to.be.an('array').that.deep.includes(beaconKey)
+        expect(view.rows(beaconKey)).to.be.an('array').that.has.lengthOf(1)
       })
 
       it('should emit value for beaconId', () => {
