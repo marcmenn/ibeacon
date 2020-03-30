@@ -1,6 +1,7 @@
 import chai from 'chai'
+import key from '../../../src/database/views/contact-report/key.js'
 
-import map, { key } from '../../../src/database/views/contact-report/map.js'
+import map from '../../../src/database/views/contact-report/map.js'
 import reduce from '../../../src/database/views/contact-report/reduce.js'
 import contactEvents from '../../test-api/contact-events.js'
 import View from '../../test-api/views.js'

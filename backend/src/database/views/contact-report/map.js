@@ -1,11 +1,5 @@
 import parseTimestamp from '../util/parse-timestamp.js'
-
-export const key = (beaconId, date) => [
-  beaconId,
-  date.getUTCFullYear(),
-  date.getUTCMonth(),
-  date.getUTCDate(),
-]
+import key from './key.js'
 
 export default (doc) => {
   const { type, payload, timestamp: serverTimestamp } = doc

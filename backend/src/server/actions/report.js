@@ -1,6 +1,6 @@
 import { HEALTH_STATUS } from '../../api/health-status.js'
 import { bucket } from '../../database/couchbase.js'
-import { key } from '../../database/views/contact-report/map.js'
+import key from '../../database/views/contact-report/key.js'
 import withBeaconIdFromDatabase from './with-beacon-id-from-database.js'
 import withDeviceId from './with-device-id.js'
 import wrapAsync from './wrap-async.js'
