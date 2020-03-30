@@ -36,10 +36,10 @@ describe('view.health-report', () => {
 
       it('should emit value for beaconId', () => {
         view.map(doc)
-        expect(view.get(beaconKey)).to.be.an('object').that.deep.equals({
+        expect(view.rows(beaconKey)).to.be.an('array').that.deep.equals([{
           ms,
           healthState,
-        })
+        }])
       })
     })
   })

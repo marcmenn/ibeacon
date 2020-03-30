@@ -42,20 +42,20 @@ describe('view.contact-report', () => {
 
       it('should emit value for beaconId', () => {
         view.map(doc)
-        expect(view.get(beaconKey)).to.be.an('object').that.deep.equals({
+        expect(view.rows(beaconKey)).to.be.an('array').that.deep.equals([{
           contact: contactedBeaconId,
           distance,
           ms,
-        })
+        }])
       })
 
       it('should emit value for contactedBeaconId', () => {
         view.map(doc)
-        expect(view.get(contactedBeaconKey)).to.be.an('object').that.deep.equals({
+        expect(view.rows(contactedBeaconKey)).to.be.an('array').that.deep.equals([{
           contact: beaconId,
           distance,
           ms,
-        })
+        }])
       })
     })
   })

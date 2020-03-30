@@ -52,10 +52,6 @@ export default class View {
     return []
   }
 
-  get(key) {
-    return this.rows(key)[0]
-  }
-
   reduce(key) {
     const rows = this.rows(key)
     return this.implReduce(key, rows, false)
