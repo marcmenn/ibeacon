@@ -31,7 +31,6 @@ struct Me: Identifiable {
     var infected: Bool
 }
 
-public var serverUrl = "https://cochain.formatquadrat.de"
 public var deviceIdString = ""
 public var beaconIdString = ""
 public var beaconRange = ""
